@@ -8,7 +8,9 @@
         Title="WifiRanger" Height="350" Width="525">
     <Grid>
         <TextBox Name="TextInput" HorizontalAlignment="Left" Height="23" Margin="200,132,0,0" TextWrapping="Wrap" Text="Floors" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
-        <Button Name ="Caluclate_Button" Content="Calculate" HorizontalAlignment="Left" Margin="213,191,0,0" VerticalAlignment="Top" Width="75" Click="Caluclate_Button_Click"/>
+        <Button Name="Calculate_Button" Content="Calculate" HorizontalAlignment="Left" Margin="213,191,0,0" VerticalAlignment="Top" Width="75" Click="Caluclate_Button_Click"/>
+        <TextBox Name="SQFT_textbox" HorizontalAlignment="Left" Height="24" Margin="200,84,0,0" TextWrapping="Wrap" Text="Square Footage" VerticalAlignment="Top" Width="120"/>
+        <Grid HorizontalAlignment="Left" Height="100" Margin="213,160,0,0" VerticalAlignment="Top" Width="100"/>
 
     </Grid>
 </Window>

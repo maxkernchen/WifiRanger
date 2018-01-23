@@ -20,13 +20,10 @@ namespace WifiRanger
     /// </summary>
     public partial class MainWindow : Window
     {
-        private String firstText;
-        private TextBox text;
+      
         public MainWindow()
         {
             InitializeComponent();
-            text = new TextBox();
-            text.Name = "text1";
             
         }
 
@@ -38,6 +35,7 @@ namespace WifiRanger
         private void Caluclate_Button_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine(TextInput.Text);
+            Console.WriteLine(SQFT_textbox.Text);
         }
     }
 }
