@@ -5,12 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WifiRanger"
         mc:Ignorable="d"
-        Title="WifiRanger" Height="350" Width="525">
+        Title="WifiRanger" Height="550" Width="725">
     <Grid>
-        <TextBox Name="TextInput" HorizontalAlignment="Left" Height="23" Margin="200,132,0,0" TextWrapping="Wrap" Text="Floors" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
-        <Button Name="Calculate_Button" Content="Calculate" HorizontalAlignment="Left" Margin="213,191,0,0" VerticalAlignment="Top" Width="75" Click="Caluclate_Button_Click"/>
-        <TextBox Name="SQFT_textbox" HorizontalAlignment="Left" Height="24" Margin="200,84,0,0" TextWrapping="Wrap" Text="Square Footage" VerticalAlignment="Top" Width="120"/>
-        <Grid HorizontalAlignment="Left" Height="100" Margin="213,160,0,0" VerticalAlignment="Top" Width="100"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            
+        </Grid.ColumnDefinitions>
+
+        <TextBox Name="TextInput" Grid.Column ="1" Grid.Row="0" Text="Floors" Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100" MinHeight="20" TextAlignment="Center"/>
+        <Button Name="Calculate_Button" Content="Calculate" Margin="0" Click="Caluclate_Button_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Height="0" MinWidth="100" MinHeight="37" />
+        <TextBox Name="SQFT_textbox" TextWrapping="Wrap" Text="Square Footage" Height="18" Width="126" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" MinWidth="100" MinHeight="20" TextAlignment="Center"/>
+
 
     </Grid>
 </Window>
