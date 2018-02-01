@@ -24,6 +24,7 @@ namespace WifiRanger
         public MainWindow()
         {
             InitializeComponent();
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             
         }
 
