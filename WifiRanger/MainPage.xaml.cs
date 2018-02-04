@@ -16,21 +16,18 @@ using System.Windows.Shapes;
 namespace WifiRanger
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MainPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainPage : Page
     {
-      
-        public MainWindow()
+        public MainPage()
         {
             InitializeComponent();
-            _NavigationFrame.Navigate(new MainPage());
-
         }
 
-  
-
-  
-        
+        private void Calculate_Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Uri("Page1.xaml", UriKind.Relative));
+        }
     }
 }
