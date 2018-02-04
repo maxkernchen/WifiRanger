@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace WifiRanger
 {
     /// <summary>
-    /// Interaction logic for Page1.xaml
+    /// Interaction logic for Floors.xaml
     /// </summary>
-    public partial class Page1 : Page
+    public partial class Floors : Page
     {
-        public Page1()
+        public Floors()
         {
             InitializeComponent();
         }

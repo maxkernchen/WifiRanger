@@ -27,7 +27,7 @@ namespace WifiRanger
 
         private void Calculate_Button_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new Uri("Page1.xaml", UriKind.Relative));
+            this.NavigationService.Navigate(new Uri("Floors.xaml", UriKind.Relative));
         }
     }
 }

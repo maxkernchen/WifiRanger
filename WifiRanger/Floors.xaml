@@ -1,4 +1,4 @@
-﻿<Page x:Class="WifiRanger.Page1"
+﻿<Page x:Class="WifiRanger.Floors"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,11 +6,10 @@
       xmlns:local="clr-namespace:WifiRanger"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
-      Title="FLoors"
-      Background="AliceBlue">
-        
-    <Grid>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="161,156,0,0" VerticalAlignment="Top"/>
+      Title="Floors"
+      Background="DarkSlateGray">
 
+    <Grid>
+        
     </Grid>
 </Page>
