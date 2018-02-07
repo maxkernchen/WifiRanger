@@ -20,6 +20,7 @@ namespace WifiRanger
     /// </summary>
     public partial class MainPage : Page
     {
+       private int FloorsVal = 0;
         public MainPage()
         {
             InitializeComponent();
@@ -27,6 +28,13 @@ namespace WifiRanger
 
         private void Calculate_Button_Click(object sender, RoutedEventArgs e)
         {
+
+            if(Floors.SelectedItem != null)
+            {
+                FloorsVal = int.Parse(Floors.Text.ToString());
+                
+                Application.Current.Properties["Floors"] = FloorsVal;
+            }
             this.NavigationService.Navigate(new Uri("Floors.xaml", UriKind.Relative));
         }
     }

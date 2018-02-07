@@ -23,6 +23,17 @@ namespace WifiRanger
         public Floors()
         {
             InitializeComponent();
+            Console.WriteLine("init called");
+            Console.WriteLine(Application.Current.Properties["Floors"]);
+
+            
+           
+        }
+
+
+        public void Calculate(int Floors)
+        {
+
         }
     }
 }
