@@ -37,5 +37,24 @@ namespace WifiRanger
             }
             this.NavigationService.Navigate(new Uri("Floors.xaml", UriKind.Relative));
         }
+
+        private void Floors_DropDownClosed(object sender, EventArgs e)
+        {
+            {
+                //check that there is at least one item selected 
+                if (Floors.SelectedItem != null)
+                {
+                    Picked_Floor.Items.Clear();
+                    int floor_num = int.Parse(Floors.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last());
+                    for(int i = 1; i <= floor_num; i++)
+                     {
+                         Picked_Floor.Items.Add(i);
+                     }
+                     
+                }
+
+
+            }
+        }
     }
 }

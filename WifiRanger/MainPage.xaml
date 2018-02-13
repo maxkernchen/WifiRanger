@@ -25,15 +25,17 @@
 
         </Grid.ColumnDefinitions>
 
-        <ComboBox Name="Floors" Grid.Column ="1" Grid.Row="3" Text="Floors" Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100" MinHeight="20" >
+        <ComboBox Name="Floors" DropDownClosed="Floors_DropDownClosed" Grid.Column ="1" Grid.Row="3" Text="Floors" Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100" MinHeight="20" Margin="0,30,0,0">
             <ComboBoxItem Content="1"/>
             <ComboBoxItem Content="2"/>
             <ComboBoxItem Content="3"/>
         </ComboBox>
+        <ComboBox Name="Picked_Floor" Grid.Column ="1" Grid.Row="4" Text="Floors" Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100" MinHeight="20" Margin="0,30,0,0">
+        </ComboBox>
         <Button Name="Calculate_Button" Content="Calculate" Margin="0" Click="Calculate_Button_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="6" Height="0" MinWidth="100" MinHeight="37" />
-        <TextBox Name="SQFT_textbox" TextWrapping="Wrap" Text="Square Footage" Height="18" Width="126" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="4" Grid.Column="1" MinWidth="100" MinHeight="20" TextAlignment="Center"/>
+        <TextBox Name="SQFT_textbox" TextWrapping="Wrap" Text="Square Footage" Height="18" Width="126" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="1" MinWidth="100" MinHeight="20" TextAlignment="Center"/>
         <Frame x:Name="_NavigationFrame" NavigationUIVisibility="Hidden" />
-        <Label Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="100,55.667,0,0" Grid.Row="2" VerticalAlignment="Top"/>
+        <Label Content="Number of Floors" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Top"/>
 
 
     </Grid>
