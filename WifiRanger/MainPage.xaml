@@ -33,7 +33,7 @@
         <ComboBox Name="Picked_Floor" Grid.Column ="1" Grid.Row="4" Text="Floors" Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100" MinHeight="20" Margin="0,30,0,0">
         </ComboBox>
         <Button Name="Calculate_Button" Content="Calculate" Margin="0" Click="Calculate_Button_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="6" Height="0" MinWidth="100" MinHeight="37" />
-        <TextBox Name="SQFT_textbox" TextWrapping="Wrap" Text="Square Footage" Height="18" Width="126" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="1" MinWidth="100" MinHeight="20" TextAlignment="Center"/>
+        <TextBox Name="SQFT_textbox" TextWrapping="Wrap" Text="Square Footage" Height="18" Width="126" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="1" MinWidth="100" MinHeight="20" TextAlignment="Left" GotFocus="SquareFTClicked"/>
         <Frame x:Name="_NavigationFrame" NavigationUIVisibility="Hidden" />
         <Label Content="Number of Floors" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Top"/>
 

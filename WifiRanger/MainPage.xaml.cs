@@ -24,6 +24,7 @@ namespace WifiRanger
         public MainPage()
         {
             InitializeComponent();
+            Picked_Floor.IsEnabled = false;
         }
 
         private void Calculate_Button_Click(object sender, RoutedEventArgs e)
@@ -45,6 +46,7 @@ namespace WifiRanger
                 if (Floors.SelectedItem != null)
                 {
                     Picked_Floor.Items.Clear();
+                    Picked_Floor.IsEnabled = true;
                     int floor_num = int.Parse(Floors.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last());
                     for(int i = 1; i <= floor_num; i++)
                      {
@@ -55,6 +57,11 @@ namespace WifiRanger
 
 
             }
+        }
+
+        private void SquareFTClicked(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("sq ft clicked");
         }
     }
 }
