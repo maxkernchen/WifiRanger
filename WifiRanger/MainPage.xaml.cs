@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Drawing;
 
 namespace WifiRanger
 {
@@ -21,10 +22,15 @@ namespace WifiRanger
     public partial class MainPage : Page
     {
        private int FloorsVal = 0;
+        private bool entered_SQFoot_Text;
         public MainPage()
         {
             InitializeComponent();
             Picked_Floor.IsEnabled = false;
+            entered_SQFoot_Text = false;
+            SQ_Feet.Foreground = new SolidColorBrush(Colors.Gray);
+         
+       
         }
 
         private void Calculate_Button_Click(object sender, RoutedEventArgs e)
@@ -59,9 +65,15 @@ namespace WifiRanger
             }
         }
 
-        private void SquareFTClicked(object sender, RoutedEventArgs e)
+        private void SQ_Feet_GotFocus(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("sq ft clicked");
+            if (!entered_SQFoot_Text)
+            {
+                SQ_Feet.Clear();
+                SQ_Feet.Foreground = new SolidColorBrush(Colors.Black);
+                entered_SQFoot_Text = true;
+            }
+              
         }
     }
 }
