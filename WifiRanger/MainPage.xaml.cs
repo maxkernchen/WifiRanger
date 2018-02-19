@@ -22,16 +22,16 @@ namespace WifiRanger
     public partial class MainPage : Page
     {
        private int FloorsVal = 0;
-        private bool entered_SQFoot_Text;
-        public MainPage()
-        {
+       private bool entered_SQFoot_Text;
+
+       public MainPage() {
             InitializeComponent();
             Picked_Floor.IsEnabled = false;
             entered_SQFoot_Text = false;
             SQ_Feet.Foreground = new SolidColorBrush(Colors.Gray);
          
        
-        }
+       }
 
         private void Calculate_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -53,6 +53,7 @@ namespace WifiRanger
                 {
                     Picked_Floor.Items.Clear();
                     Picked_Floor.IsEnabled = true;
+                    // just get the int value 
                     int floor_num = int.Parse(Floors.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last());
                     for(int i = 1; i <= floor_num; i++)
                      {
@@ -67,13 +68,11 @@ namespace WifiRanger
 
         private void SQ_Feet_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (!entered_SQFoot_Text)
-            {
+            if (!entered_SQFoot_Text) {
                 SQ_Feet.Clear();
                 SQ_Feet.Foreground = new SolidColorBrush(Colors.Black);
                 entered_SQFoot_Text = true;
-            }
-              
+            }              
         }
     }
 }

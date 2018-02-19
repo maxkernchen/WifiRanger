@@ -7,9 +7,30 @@
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
       Title="Floors"
-      Background="DarkSlateGray">
+      Background="Wheat">
+    
 
     <Grid>
         
+        <Canvas>
+            <Canvas.Resources>
+                <ControlTemplate x:Key="FloorLayoutTemplate" TargetType="ContentControl">
+                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}"/>
+                </ControlTemplate>
+            </Canvas.Resources>
+            <ContentControl Name="FloorLayout"
+
+                   Width="100"
+
+                   Height="100"
+
+                   Canvas.Top="100"
+
+                   Canvas.Left="100"
+
+                   Template="{StaticResource FloorLayoutTemplate}">
+                <Rectangle />
+            </ContentControl>
+        </Canvas>
     </Grid>
 </Page>
