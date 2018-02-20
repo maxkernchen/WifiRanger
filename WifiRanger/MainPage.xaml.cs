@@ -23,7 +23,7 @@ namespace WifiRanger
     {
        private int FloorsVal = 0;
        private bool entered_SQFoot_Text;
-
+      
        public MainPage() {
             InitializeComponent();
             Picked_Floor.IsEnabled = false;
@@ -36,13 +36,19 @@ namespace WifiRanger
         private void Calculate_Button_Click(object sender, RoutedEventArgs e)
         {
 
-            if(Floors.SelectedItem != null)
+            if(Picked_Floor.SelectedItem != null)
             {
-                FloorsVal = int.Parse(Floors.Text.ToString());
+                FloorsVal = int.Parse(Picked_Floor.Text.ToString());
                 
                 Application.Current.Properties["Floors"] = FloorsVal;
+                this.NavigationService.Navigate(new Uri("Floors.xaml", UriKind.Relative));
             }
-            this.NavigationService.Navigate(new Uri("Floors.xaml", UriKind.Relative));
+            else
+            {
+                ToolTip tooltip = (ToolTip)Picked_Floor.ToolTip;
+                tooltip.IsOpen = true;
+            }
+            
         }
 
         private void Floors_DropDownClosed(object sender, EventArgs e)

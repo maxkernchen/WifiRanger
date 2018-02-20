@@ -25,13 +25,19 @@ namespace WifiRanger
             InitializeComponent();
             Console.WriteLine("init called");
             Console.WriteLine(Application.Current.Properties["Floors"]);
+            FloorLabel.Content = "Choose the shape which best matches floor " + Application.Current.Properties["Floors"];
 
-            
-           
+
+
         }
 
 
         public void Calculate(int Floors)
+        {
+
+        }
+
+        private void rect_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
         }

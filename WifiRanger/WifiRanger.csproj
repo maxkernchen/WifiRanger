@@ -71,6 +71,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ComboEmptyRule.cs" />
     <Compile Include="Floors.xaml.cs">
       <DependentUpon>Floors.xaml</DependentUpon>
     </Compile>

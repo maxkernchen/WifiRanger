@@ -30,7 +30,14 @@
             <ComboBoxItem Content="2"/>
             <ComboBoxItem Content="3"/>
         </ComboBox>
-        <ComboBox Name="Picked_Floor" Grid.Column ="1" Grid.Row="4" Text="Floors" Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100" MinHeight="20" Margin="0,30,0,0">
+        <ComboBox Name="Picked_Floor" ToolTip="Pick a Floor" Grid.Column ="1" Grid.Row="4" Text="Floors" Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100" MinHeight="20" Margin="0,30,0,0">
+            <ComboBox.Text>
+            <Binding Path="Floor" ElementName="This" UpdateSourceTrigger="Explicit">
+                <Binding.ValidationRules>
+                    <local:ComboEmptyRule/>
+                </Binding.ValidationRules>
+            </Binding>
+            </ComboBox.Text>
         </ComboBox>
         <Button Name="Calculate_Button" Content="Calculate" Margin="0" Click="Calculate_Button_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="6" Height="0" MinWidth="100" MinHeight="37" />
         <Frame x:Name="_NavigationFrame" NavigationUIVisibility="Hidden" />

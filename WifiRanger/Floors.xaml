@@ -5,32 +5,23 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WifiRanger"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="550" d:DesignWidth="725"
       Title="Floors"
-      Background="Wheat">
-    
-
+      Background="AliceBlue">
+   
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         
-        <Canvas>
-            <Canvas.Resources>
-                <ControlTemplate x:Key="FloorLayoutTemplate" TargetType="ContentControl">
-                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}"/>
-                </ControlTemplate>
-            </Canvas.Resources>
-            <ContentControl Name="FloorLayout"
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Rectangle Grid.Column="0" Grid.Row="1" Margin="10" x:Name="rect" 
+    Width="100" Height="100" Stroke="Aqua" MouseLeftButtonDown="rect_MouseLeftButtonDown"/>
+        <Label Content="Choose the shape which best matches floor " Name ="FloorLabel" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Top"/>
 
-                   Width="100"
-
-                   Height="100"
-
-                   Canvas.Top="100"
-
-                   Canvas.Left="100"
-
-                   Template="{StaticResource FloorLayoutTemplate}">
-                <Rectangle />
-            </ContentControl>
-        </Canvas>
     </Grid>
 </Page>
