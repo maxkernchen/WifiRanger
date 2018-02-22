@@ -29,6 +29,8 @@ namespace WifiRanger
             Picked_Floor.IsEnabled = false;
             entered_SQFoot_Text = false;
             SQ_Feet.Foreground = new SolidColorBrush(Colors.Gray);
+
+      
          
        
        }
@@ -45,10 +47,10 @@ namespace WifiRanger
             }
             else
             {
-                ToolTip tooltip = (ToolTip)Picked_Floor.ToolTip;
-                tooltip.IsOpen = true;
+               
+
             }
-            
+
         }
 
         private void Floors_DropDownClosed(object sender, EventArgs e)
@@ -79,6 +81,12 @@ namespace WifiRanger
                 SQ_Feet.Foreground = new SolidColorBrush(Colors.Black);
                 entered_SQFoot_Text = true;
             }              
+        }
+
+        private void Picked_Floor_DropDownClosed(object sender, EventArgs e)
+        {
+            FloorsVal = int.Parse(Picked_Floor.Text.ToString());
+
         }
     }
 }

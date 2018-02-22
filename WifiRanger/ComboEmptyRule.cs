@@ -7,17 +7,19 @@ using System.Windows.Controls;
 
 namespace WifiRanger
 {
-    class ComboEmptyRule: ValidationRule
+    public class ComboEmptyRule: ValidationRule
     {
         public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
         {
-          if(value == null)
+          if(value == null || (int)value == 2)
             {
                 return new ValidationResult(false, "Please enter a floor");
+                
             }
             else
             {
                 return new ValidationResult(true, null);
+                
             }
 
         }
