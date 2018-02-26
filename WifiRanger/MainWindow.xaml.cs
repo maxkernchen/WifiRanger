@@ -24,7 +24,7 @@ namespace WifiRanger
         public MainWindow()
         {
             InitializeComponent();
-            _NavigationFrame.Navigate(new MainPage());
+            _NavigationFrame.Navigate(new Routers());
 
         }
 
