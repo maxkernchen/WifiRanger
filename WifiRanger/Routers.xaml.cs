@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MySql.Data.MySqlClient;
+using System.Configuration;
 
 namespace WifiRanger
 {
@@ -32,7 +35,22 @@ namespace WifiRanger
                 new RouterData{Title="Router5", ImageData=LoadImage("wireless-router.jpg")}
 
        };
-            
+
+            MySqlConnection cnn;
+            String connetionString = ConfigurationManager.ConnectionStrings["WifiRangerDBConnection"].ConnectionString; 
+
+            cnn = new MySqlConnection(connetionString);
+            try
+            {
+                cnn.Open();
+                MessageBox.Show("Connection Open ! ");
+                cnn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Can not open connection ! " + ex.ToString());
+
+            }
         }
 
         /**
