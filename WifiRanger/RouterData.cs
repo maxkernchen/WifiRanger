@@ -9,14 +9,16 @@ namespace WifiRanger
 {
     class RouterData
     {
-        private string _Title;
-        public string Title
+        private string _Name;
+
+        public string Name
         {
-            get { return this._Title; }
-            set { this._Title = value; }
+            get { return this._Name; }
+            set { this._Name = value; }
         }
 
         private BitmapImage _ImageData;
+
         public BitmapImage ImageData
         {
             get { return this._ImageData; }

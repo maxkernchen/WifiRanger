@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
 using System.Configuration;
+using System.Data;
 
 namespace WifiRanger
 {
@@ -23,34 +24,35 @@ namespace WifiRanger
     /// </summary>
     public partial class Routers : Page
     {
+        //number of rows in router database
+        private int numRows;
+        // the column that contains the Router Name
+        private static readonly int routerName = 1;
+        // location of Router table in router database
+        private static readonly int routerTable = 0;
+
         public Routers()
         {
             InitializeComponent();
-            RouterList.ItemsSource = new RouterData[]
-       {
-            new RouterData{Title="Router1", ImageData=LoadImage("wireless-router.jpg")},
-             new RouterData{Title="Router2", ImageData=LoadImage("wireless-router.jpg")},
-              new RouterData{Title="Router3", ImageData=LoadImage("wireless-router.jpg")},
-               new RouterData{Title="Router4", ImageData=LoadImage("wireless-router.jpg")},
-                new RouterData{Title="Router5", ImageData=LoadImage("wireless-router.jpg")}
-
-       };
-
-            MySqlConnection cnn;
-            String connetionString = ConfigurationManager.ConnectionStrings["WifiRangerDBConnection"].ConnectionString; 
-
-            cnn = new MySqlConnection(connetionString);
-            try
+            DataSet routerDS = this.getRouterData();
+            DataRow routerDR;
+            numRows = routerDS.Tables[0].Rows.Count;
+            RouterData[] routerDataArray = new RouterData[numRows];
+            for(int i = 0; i < numRows; i++)
             {
-                cnn.Open();
-                MessageBox.Show("Connection Open ! ");
-                cnn.Close();
+                routerDR = routerDS.Tables[routerTable].Rows[i];
+                routerDataArray[i] = new RouterData
+                {
+                    Name = routerDR.ItemArray.GetValue(routerName).ToString(),
+                    ImageData = LoadImage("wireless-router.jpg")
+                };
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Can not open connection ! " + ex.ToString());
 
-            }
+
+            RouterList.ItemsSource = routerDataArray;
+      
+
+          
         }
 
         /**
@@ -68,8 +70,32 @@ namespace WifiRanger
         private void RouterItem_MouseUp(object sender, MouseButtonEventArgs e)
         {
             RouterData routerData = (RouterData)RouterList.SelectedItem;
-            Console.WriteLine(routerData.Title);
+            Console.WriteLine(routerData.Name);
+        }
+
+        private DataSet getRouterData()
+        {
+            SqlConnection connection = new SqlConnection(Properties.Settings.Default.RoutersDBConnectionString);
+
+            try
+            {
+                connection.Open();
+            }
+            catch (Exception ex)
+            {
+                //will need to go to log file later
+                Console.WriteLine("Can not open connection ! " + ex.ToString());
+            }
+
+            SqlDataAdapter sqlData = new SqlDataAdapter(Properties.Settings.Default.allRouters, connection);
+            DataSet routerDataSet = new DataSet();
+            // put the data in the dataset and source it back to the Routers table
+            sqlData.Fill(routerDataSet, "Routers");
+
+            return routerDataSet;
         }
     }
+
+    
 }
 

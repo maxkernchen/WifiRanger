@@ -38,7 +38,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MouseUp="RouterItem_MouseUp">
-                        <TextBlock Text="{Binding Title}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                         <Image Source="{Binding ImageData}" Width ="80" Height="80"  Stretch="UniformToFill" />
                         
                     </StackPanel>
