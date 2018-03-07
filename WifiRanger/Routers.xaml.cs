@@ -16,6 +16,9 @@ using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Data;
+using System.Xml;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace WifiRanger
 {
@@ -38,7 +41,7 @@ namespace WifiRanger
             DataRow routerDR;
             numRows = routerDS.Tables[0].Rows.Count;
             RouterData[] routerDataArray = new RouterData[numRows];
-            for(int i = 0; i < numRows; i++)
+            for (int i = 0; i < numRows; i++)
             {
                 routerDR = routerDS.Tables[routerTable].Rows[i];
                 routerDataArray[i] = new RouterData
@@ -50,11 +53,39 @@ namespace WifiRanger
 
 
             RouterList.ItemsSource = routerDataArray;
-      
+            String url = "enterwalmartapiurlhere";
+            /**
+                        XmlTextReader reader = new XmlTextReader(url);
+                        String prevElement = "";
 
-          
-        }
+                        while (reader.Read())
+                        {
+                            switch (reader.NodeType)
+                            {
 
+                                case XmlNodeType.Element: // The node is an element.
+                                    //Console.Write(reader.Name);
+                                    prevElement = reader.Name;
+                                    break;
+                                case XmlNodeType.Text: //Display the text in each element.
+                                    if(prevElement == "msrp")
+                                        Console.WriteLine(reader.Value + " value");
+                                    break;
+
+                            }
+                        }
+
+                        */
+            using (var webClient = new System.Net.WebClient())
+            {
+                var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/46927632?format=json&apiKey=enterkeyhere");
+                var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
+                Console.WriteLine(results["msrp"]);
+                }
+
+
+            }
+        
         /**
          * Opens the Image from the resources folder
             @param: String:filename - the name of the file inside the resources folder
