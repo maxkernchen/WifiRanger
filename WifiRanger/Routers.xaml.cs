@@ -19,6 +19,8 @@ using System.Data;
 using System.Xml;
 using System.Net;
 using Newtonsoft.Json;
+using System.Threading;
+
 
 namespace WifiRanger
 {
@@ -76,15 +78,16 @@ namespace WifiRanger
                         }
 
                         */
+                        /*
             using (var webClient = new System.Net.WebClient())
             {
                 var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/46927632?format=json&apiKey=enterkeyhere");
                 var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
                 Console.WriteLine(results["msrp"]);
                 }
-
-
-            }
+                */
+            Console.WriteLine(this.calculateDistance(-55, 2400));
+        }
         
         /**
          * Opens the Image from the resources folder
@@ -125,8 +128,14 @@ namespace WifiRanger
 
             return routerDataSet;
         }
+
+        public double calculateDistance(double levelInDb, double freqInMHz)
+        {
+            double exp = (37.55 - (20 * Math.Log10(freqInMHz)) + Math.Abs(levelInDb)) / 20.0;
+            return Math.Pow(10.0, exp);
+        }
     }
 
-    
+   
 }
 
