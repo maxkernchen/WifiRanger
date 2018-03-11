@@ -25,6 +25,20 @@ namespace WifiRanger
             set { this._ImageData = value; }
         }
 
+        private string _Model;
+
+        public string Model
+        {
+            get { return this._Model; }
+            set { this._Model = value; }
+        }
+        private string _Price;
+
+        public string Price
+        {
+            get { return this._Price; }
+            set { this._Price = value; }
+        }
     }
 }
 

@@ -40,7 +40,10 @@
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MouseUp="RouterItem_MouseUp">
                         <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                         <Image Source="{Binding ImageData}" Width ="80" Height="80"  Stretch="UniformToFill" />
-                        
+                        <TextBlock Text="{Binding Model}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Price}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                       
+
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
