@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WifiRanger"
       mc:Ignorable="d" 
-        Title="WifiRanger" Height="550" Width="725"
+        Title="WifiRanger" Height="1024" Width="768"
       Background="AliceBlue">
 
     <Grid>
@@ -18,11 +18,11 @@
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="40" />
 
             <ColumnDefinition Width="*" />
 
-            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="40" />
 
 
 
@@ -32,21 +32,64 @@
         <ListView x:Name="RouterList" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Rows="5" VerticalAlignment="Stretch"/>
+                    <UniformGrid Rows="6" VerticalAlignment="Stretch" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <!--<ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MouseUp="RouterItem_MouseUp">
-                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                        
+                        <TextBlock Text="{Binding Name}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                         <Image Source="{Binding ImageData}" Width ="80" Height="80"  Stretch="UniformToFill" />
-                        <TextBlock Text="{Binding Model}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding Price}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Model}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Price}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                        
 
                     </StackPanel>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+                
+
+
+
+            </ListView.ItemTemplate> -->
+
+            <ListView.View>
+        
+                <GridView AllowsColumnReorder="true"
+              ColumnHeaderToolTip="Router Info"   >
+                    <GridViewColumn Header="Brand" Width="auto" DisplayMemberBinding=
+                          "{Binding Name }" />
+                    <GridViewColumn Header="Image" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding ImageData}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Model" Width="auto" DisplayMemberBinding=
+                          "{Binding Model }" />
+                    <GridViewColumn Header="Current Price" Width="auto" DisplayMemberBinding=
+                          "{Binding Price }" />
+                    <GridViewColumn Header="Store Page" Width="auto" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Name="urlToContent" >
+                                    <Hyperlink NavigateUri="{Binding URL}" Name="StoreLink"   RequestNavigate="URL_RequestNavigate">
+                                        <TextBlock Text="Walmart Store Page"/>  
+                                    </Hyperlink>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+              
+                
+            </ListView.View>
         </ListView>
     </Grid>
 </Page>

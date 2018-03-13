@@ -39,6 +39,15 @@ namespace WifiRanger
             get { return this._Price; }
             set { this._Price = value; }
         }
+
+        private string _URL;
+
+        public string URL
+        {
+            get { return this._URL; }
+            set { this._URL = value; }
+        }
+
     }
 }
 

@@ -20,7 +20,7 @@ using System.Xml;
 using System.Net;
 using Newtonsoft.Json;
 using System.Threading;
-
+using System.Diagnostics;
 
 namespace WifiRanger
 {
@@ -42,6 +42,8 @@ namespace WifiRanger
         // location of Router table in router database
         private static readonly int ROUTER_TABLE = 0;
 
+        private bool connectedToInternet = false;
+
         public Routers()
         {
             InitializeComponent();
@@ -57,7 +59,8 @@ namespace WifiRanger
                     Name = routerDR.ItemArray.GetValue(ROUTER_NAME).ToString(),
                     ImageData = LoadImage(routerDR.ItemArray.GetValue(ROUTER_IMAGE).ToString()),
                     Model = routerDR.ItemArray.GetValue(ROUTER_MODEL).ToString(),
-                    Price = this.getPrice(routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString())
+                    Price = this.getPrice(routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString()),
+                    URL = this.getURL(routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString())
                 };
             }
 
@@ -159,11 +162,46 @@ namespace WifiRanger
             }catch(System.Net.WebException we)
             {
                 Console.WriteLine(we.ToString());
+                connectedToInternet = false;
+                return "No Price Available";
             }
-
+            connectedToInternet = true;
             return System.Convert.ToString(price);
         }
-    
+        private string getURL(string itemid)
+        {
+            String productUrl = "";
+            try
+            {
+                using (var webClient = new System.Net.WebClient())
+                {
+                    String url = "http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString();
+                    Console.WriteLine(url);
+                    var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString());
+                    var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
+                    productUrl = results["productUrl"];
+                }
+            }
+            catch (System.Net.WebException we)
+            {
+                connectedToInternet = false;
+                Console.WriteLine(we.ToString());
+            }
+            connectedToInternet = true;
+            return productUrl;
+        }
+
+        private void URL_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                e.Handled = true;
+            }catch(System.InvalidOperationException ioe)
+            {
+                MessageBox.Show("No Internet Connection Found");
+            }
+        }
     }
 
    
