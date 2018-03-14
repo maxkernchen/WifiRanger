@@ -114,8 +114,10 @@ namespace WifiRanger
 
         private void RouterItem_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            RouterData routerData = (RouterData)RouterList.SelectedItem;
-            Console.WriteLine(routerData.Name);
+            Console.WriteLine("Selected index " + RouterList.SelectedIndex);
+            Application.Current.Properties["SelectedRouter"] = RouterList.SelectedIndex + 1;
+            this.NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
+
         }
 
         private DataSet getRouterData()
@@ -154,7 +156,7 @@ namespace WifiRanger
                 using (var webClient = new System.Net.WebClient())
                 {
                     String url = "http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString();
-                    Console.WriteLine(url);
+                
                     var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/"+ itemid+"?format=json&apiKey="+ ConfigurationManager.AppSettings["WalmartKey"].ToString());
                     var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
                     price = results["salePrice"];
@@ -176,7 +178,7 @@ namespace WifiRanger
                 using (var webClient = new System.Net.WebClient())
                 {
                     String url = "http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString();
-                    Console.WriteLine(url);
+                    
                     var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString());
                     var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
                     productUrl = results["productUrl"];

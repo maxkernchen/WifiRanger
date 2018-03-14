@@ -28,6 +28,7 @@ namespace WifiRanger
             InitializeComponent();
             Picked_Floor.IsEnabled = false;
             entered_SQFoot_Text = false;
+            RouterLocation.IsEnabled = false;
             SQ_Feet.Foreground = new SolidColorBrush(Colors.Gray);
             Calculate_Button.IsEnabled = false;
       
@@ -62,6 +63,7 @@ namespace WifiRanger
                     Picked_Floor.Items.Clear();
                     Picked_Floor.IsEnabled = true;
                     Calculate_Button.IsEnabled = false;
+                    
                     // just get the int value 
                     int floor_num = int.Parse(Floors.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last());
                     for(int i = 1; i <= floor_num; i++)
@@ -87,6 +89,7 @@ namespace WifiRanger
         private void Picked_Floor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Calculate_Button.IsEnabled = true;
+            RouterLocation.IsEnabled = true;
         }
     }
 }

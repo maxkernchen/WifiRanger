@@ -25,10 +25,15 @@
 
         </Grid.ColumnDefinitions>
 
-        <ComboBox Name="Floors" DropDownClosed="Floors_DropDownClosed" Grid.Column ="1" Grid.Row="3" Text="Floors" Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100" MinHeight="20" Margin="0,30,0,0">
+        <ComboBox Name="Floors" DropDownClosed="Floors_DropDownClosed" Grid.Column ="1" Grid.Row="2" Text="Floors" Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100" MinHeight="20" Margin="0,30,0,0">
             <ComboBoxItem Content="1"/>
             <ComboBoxItem Content="2"/>
             <ComboBoxItem Content="3"/>
+        </ComboBox>
+        <ComboBox Name="RouterLocation" Grid.Column ="1" Grid.Row="3" ToolTip="Enter the approximation location of the router" Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100" MinHeight="20" Margin="0,30,0,0">
+            <ComboBoxItem Content="Near the Center "/>
+            <ComboBoxItem Content="Near a Corner"/>
+            
         </ComboBox>
         <ComboBox Name="Picked_Floor" ToolTip="Pick a Floor" Grid.Column ="1" Grid.Row="4"  SelectionChanged ="Picked_Floor_SelectionChanged" Grid.IsSharedSizeScope="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100" MinHeight="20" Margin="0,30,0,0">
             <ComboBox.SelectedItem>
@@ -41,7 +46,7 @@
         </ComboBox>
         <Button Name="Calculate_Button" Content="Calculate" Margin="0" Click="Calculate_Button_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="6" Height="0" MinWidth="100" MinHeight="37" />
         <Frame x:Name="_NavigationFrame" NavigationUIVisibility="Hidden" />
-        <Label Content="Number of Floors" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Top"/>
+        <Label Content="Number of Floors" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Top"/>
         <TextBox Name="SQ_Feet" Text="Square Feet" Grid.Column="1" HorizontalAlignment="Center" GotFocus="SQ_Feet_GotFocus" VerticalAlignment="Center" Grid.Row="5"  Width="135" Height="21" Margin="53,25.667,53.333,22">
             
         </TextBox>

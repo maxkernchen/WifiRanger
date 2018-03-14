@@ -38,7 +38,9 @@
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <EventSetter Event="MouseUp" Handler="RouterItem_MouseUp" />
                 </Style>
+                
             </ListView.ItemContainerStyle>
             <!--<ListView.ItemTemplate>
                 <DataTemplate>
@@ -61,10 +63,10 @@
             <ListView.View>
         
                 <GridView AllowsColumnReorder="true"
-              ColumnHeaderToolTip="Router Info"   >
+              ColumnHeaderToolTip="Router Info"  >
                     <GridViewColumn Header="Brand" Width="auto" DisplayMemberBinding=
                           "{Binding Name }" />
-                    <GridViewColumn Header="Image" Width="150">
+                    <GridViewColumn Header="Image" Width="150" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Source="{Binding ImageData}" />
