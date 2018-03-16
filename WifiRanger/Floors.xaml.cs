@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace WifiRanger
 {
@@ -20,36 +22,44 @@ namespace WifiRanger
     /// </summary>
     public partial class Floors : Page
     {
+        private DispatcherTimer coverageTimer;
+        private double percentCoverageVal = 0.0;
         public Floors()
         {
             InitializeComponent();
             Console.WriteLine("init called");
             Console.WriteLine(Application.Current.Properties["Floors"]);
+            coverageTimer = new DispatcherTimer();
+            coverageTimer.Interval = new TimeSpan(0, 0, 0,0,10);
+            coverageTimer.Tick += CoverageTimer_Tick;
+
+
 
 
 
         }
 
-
-        public void Calculate()
+        private void CoverageTimer_Tick(object sender, EventArgs e)
         {
-            double percentCoverageVal = 0.0;
-            while (percentCoverageVal < 100)
+            percentCoverageVal += 1;
+            PercentCoverage.Content = percentCoverageVal+ " %";
+            if (percentCoverageVal < 30)
+                PercentCoverage.Foreground = Brushes.Red;
+            if (percentCoverageVal > 30 && percentCoverageVal < 70)
+                PercentCoverage.Foreground = Brushes.Orange;
+            if (percentCoverageVal > 70)
+                PercentCoverage.Foreground = Brushes.PaleGreen;
+            if (percentCoverageVal >= 100)
             {
-                PercentCoverage.Content = percentCoverageVal;
-                percentCoverageVal += .5;
-                System.Threading.Thread.Sleep(50);
+                coverageTimer.Stop();
             }
-
         }
 
-        void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            //Floors.Instance.WindowLoadedCommand.Execute(null);
-        }
-        private void rect_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
+        
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            coverageTimer.Start();
         }
     }
 }
