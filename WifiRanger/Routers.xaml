@@ -28,7 +28,7 @@
 
 
         </Grid.ColumnDefinitions>
-
+<!--
         <ListView x:Name="RouterList" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -42,7 +42,7 @@
                 </Style>
                 
             </ListView.ItemContainerStyle>
-            <!--<ListView.ItemTemplate>
+            <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MouseUp="RouterItem_MouseUp">
                         
@@ -58,11 +58,11 @@
 
 
 
-            </ListView.ItemTemplate> -->
+            </ListView.ItemTemplate> 
 
             <ListView.View>
         
-                <GridView AllowsColumnReorder="true"
+                <GridView AllowsColumnReorder="true" Or
               ColumnHeaderToolTip="Router Info"  >
                     <GridViewColumn Header="Brand" Width="auto" DisplayMemberBinding=
                           "{Binding Name }" />
@@ -93,5 +93,19 @@
                 
             </ListView.View>
         </ListView>
+        
+        -->
+
+        <DataGrid Name="RouterList" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Image" Width="100" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding ImageData}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>

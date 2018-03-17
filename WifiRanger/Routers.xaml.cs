@@ -97,7 +97,7 @@ namespace WifiRanger
                 Console.WriteLine(results["msrp"]);
                 }
                 */
-            Console.WriteLine(this.calculateDistance(-60, 2400));
+            
         }
         
         /**
@@ -115,7 +115,9 @@ namespace WifiRanger
         private void RouterItem_MouseUp(object sender, MouseButtonEventArgs e)
         {
             Console.WriteLine("Selected index " + RouterList.SelectedIndex);
-            Application.Current.Properties["SelectedRouter"] = RouterList.SelectedIndex + 1;
+            RouterData routerData = RouterList.SelectedItem as RouterData;
+            Application.Current.Properties["SelectedRouter"] = routerData.Model;
+            Console.WriteLine(routerData.Model);
             this.NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
 
         }
@@ -142,12 +144,6 @@ namespace WifiRanger
             return routerDataSet;
         }
 
-        private double calculateDistance(double levelInDb, double freqInMHz)
-        {
-            double exp = (27.55 - (20 * Math.Log10(freqInMHz)) + Math.Abs(levelInDb)) / 20.0;
-            // times 2 to get a better reading, after real world tests. 
-            return 2 * Math.Pow(10.0, exp);
-        }
         private string getPrice(string itemid)
         {
             double price = 0.0;
