@@ -28,7 +28,7 @@
 
 
         </Grid.ColumnDefinitions>
-<!--
+
         <ListView x:Name="RouterList" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -62,7 +62,7 @@
 
             <ListView.View>
         
-                <GridView AllowsColumnReorder="true" Or
+                <GridView AllowsColumnReorder="true"
               ColumnHeaderToolTip="Router Info"  >
                     <GridViewColumn Header="Brand" Width="auto" DisplayMemberBinding=
                           "{Binding Name }" />
@@ -94,10 +94,34 @@
             </ListView.View>
         </ListView>
         
-        -->
-
-        <DataGrid Name="RouterList" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False">
+        
+<!---
+        <DataGrid Name="RouterList" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" BorderThickness=".2">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver"
+                           Value="True">
+                            <Setter Property="Background"
+                               Value="AliceBlue" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseUp" Handler="RouterItem_MouseUp"/>
+                </Style>
+            </DataGrid.ItemContainerStyle>
             <DataGrid.Columns>
+                
+                <DataGridTemplateColumn Header="Brand" Width="100" IsReadOnly="True">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Image" Width="100" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -107,5 +131,6 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        -->
     </Grid>
 </Page>

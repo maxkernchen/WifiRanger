@@ -44,6 +44,7 @@ namespace WifiRanger
                 FloorsVal = int.Parse(Picked_Floor.Text.ToString());
                 
                 Application.Current.Properties["Floors"] = FloorsVal;
+                Application.Current.Properties["SQ_Feet"] = SQ_Feet.Text;
                 this.NavigationService.Navigate(new Uri("Floors.xaml", UriKind.Relative));
             }
             else
