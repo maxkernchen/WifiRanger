@@ -28,13 +28,14 @@ namespace WifiRanger
         private DispatcherTimer coverageTimer;
         private double percentCoverageVal = 0.0;
         private double counter = 0.0;
+        private static readonly int INTERFERENCE_CONST = 1;
         public Floors()
         {
             InitializeComponent();
             Console.WriteLine("init called");
             Console.WriteLine(Application.Current.Properties["Floors"]);
             Console.WriteLine(this.getRouterFrequency(Application.Current.Properties["SelectedRouter"].ToString()));
-            double meters = this.calculateDistance(-63,this.getRouterFrequency(Application.Current.Properties["SelectedRouter"].ToString()));
+            double meters = this.calculateDistance(-65,this.getRouterFrequency(Application.Current.Properties["SelectedRouter"].ToString()));
             Console.WriteLine(meters);
             Console.WriteLine(this.calulateCoverage(meters, Convert.ToDouble(Application.Current.Properties["SQ_Feet"].ToString())));
             percentCoverageVal = this.calulateCoverage(meters, Convert.ToDouble(Application.Current.Properties["SQ_Feet"].ToString()));
@@ -68,7 +69,7 @@ namespace WifiRanger
 
         private double calculateDistance(double levelInDb, double freqInMHz)
         {
-            double exp = (27.55 - (20 * Math.Log10(freqInMHz)) + Math.Abs(levelInDb)) / 20.0;
+            double exp = (27.55 - INTERFERENCE_CONST - (20 * Math.Log10(freqInMHz)) + Math.Abs(levelInDb)) / 20.0;
             // times 2 to get a better reading, after real world tests. 
             return Math.Pow(10.0, exp);
         }
@@ -83,7 +84,7 @@ namespace WifiRanger
             double widthCoverage = distance / width;
 
             double hypoCoverage = Math.Sqrt(Math.Pow(length,2) + Math.Pow(width,2));
-            double cov = distance / hypoCoverage *100;
+            double cov = (distance / hypoCoverage) * 100;
             double coverage = (lengthCoverage/2 + widthCoverage/2) * 100;
             Console.WriteLine(coverage + " cov val");
             if (cov > 100)
