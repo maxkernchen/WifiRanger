@@ -5,54 +5,56 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WifiRanger"
       mc:Ignorable="d" 
-        Title="WifiRanger" Height="1024" Width="768"
+        Title="WifiRanger" Height="900" Width="800"
       Background="AliceBlue">
 
     <Grid>
-
+        <Grid.Background>
+            <ImageBrush ImageSource="Resources/BackGround2.png" Stretch="UniformToFill"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="300"/>
             <RowDefinition Height="50"/>
 
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="100" />
 
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="600" />
 
-            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="100" />
 
 
 
 
         </Grid.ColumnDefinitions>
 
-        <ListView x:Name="RouterList" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Rows="6" VerticalAlignment="Stretch" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+        <ListView x:Name="RouterList"   VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            
+
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                     <EventSetter Event="MouseUp" Handler="RouterItem_MouseUp" />
+                    
                 </Style>
                 
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MouseUp="RouterItem_MouseUp">
-                        
-                        <TextBlock Text="{Binding Name}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-                        <Image Source="{Binding ImageData}" Width ="80" Height="80"  Stretch="UniformToFill" />
-                        <TextBlock Text="{Binding Model}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding Price}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                       
+                  
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" MouseUp="RouterItem_MouseUp">
 
-                    </StackPanel>
+                            <TextBlock Text="{Binding Name}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <Image Source="{Binding ImageData}" Width ="80" Height="80"  Stretch="UniformToFill" />
+                            <TextBlock Text="{Binding Model}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Price}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+
+                        </StackPanel>
+                   
                 </DataTemplate>
                 
 
@@ -62,9 +64,9 @@
 
             <ListView.View>
         
-                <GridView AllowsColumnReorder="true"
+                <GridView AllowsColumnReorder="true" 
               ColumnHeaderToolTip="Router Info"  >
-                    <GridViewColumn Header="Brand" Width="auto" DisplayMemberBinding=
+                    <GridViewColumn Header="Brand" Width="100" DisplayMemberBinding=
                           "{Binding Name }" />
                     <GridViewColumn Header="Image" Width="150" >
                         <GridViewColumn.CellTemplate>
@@ -73,11 +75,11 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Model" Width="auto" DisplayMemberBinding=
+                    <GridViewColumn Header="Model" Width="100" DisplayMemberBinding=
                           "{Binding Model }" />
-                    <GridViewColumn Header="Current Price" Width="auto" DisplayMemberBinding=
+                    <GridViewColumn Header="Current Price" Width="100" DisplayMemberBinding=
                           "{Binding Price }" />
-                    <GridViewColumn Header="Store Page" Width="auto" >
+                    <GridViewColumn Header="Store Page" Width="100" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Name="urlToContent" >

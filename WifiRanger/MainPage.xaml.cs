@@ -26,9 +26,9 @@ namespace WifiRanger
       
        public MainPage() {
             InitializeComponent();
-            Picked_Floor.IsEnabled = false;
+            //Picked_Floor.IsEnabled = false;
             entered_SQFoot_Text = false;
-            RouterLocation.IsEnabled = false;
+            //RouterLocation.IsEnabled = false;
             SQ_Feet.Foreground = new SolidColorBrush(Colors.Gray);
             Calculate_Button.IsEnabled = false;
       
@@ -39,11 +39,11 @@ namespace WifiRanger
         private void Calculate_Button_Click(object sender, RoutedEventArgs e)
         {
 
-            if(Picked_Floor.SelectedItem != null)
+            if(Floors.SelectedItem != null)
             {
-                FloorsVal = int.Parse(Picked_Floor.Text.ToString());
+               // FloorsVal = int.Parse(Picked_Floor.Text.ToString());
                 
-                Application.Current.Properties["Floors"] = FloorsVal;
+                //Application.Current.Properties["Floors"] = FloorsVal;
                 Application.Current.Properties["SQ_Feet"] = SQ_Feet.Text;
                 this.NavigationService.Navigate(new Uri("Floors.xaml", UriKind.Relative));
             }
@@ -61,17 +61,18 @@ namespace WifiRanger
                 //check that there is at least one item selected 
                 if (Floors.SelectedItem != null)
                 {
-                    Picked_Floor.Items.Clear();
-                    Picked_Floor.IsEnabled = true;
-                    Calculate_Button.IsEnabled = false;
+                   // Picked_Floor.Items.Clear();
+                   // Picked_Floor.IsEnabled = true;
+                    Calculate_Button.IsEnabled = true;
                     
                     // just get the int value 
                     int floor_num = int.Parse(Floors.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last());
-                    for(int i = 1; i <= floor_num; i++)
-                     {
-                         Picked_Floor.Items.Add(i);
-                     }
-                     
+                    Application.Current.Properties["Floors"] = floor_num;
+                    // for(int i = 1; i <= floor_num; i++)
+                    // {
+                    //Picked_Floor.Items.Add(i);
+                    //}
+
                 }
 
 
@@ -89,8 +90,8 @@ namespace WifiRanger
 
         private void Picked_Floor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Calculate_Button.IsEnabled = true;
-            RouterLocation.IsEnabled = true;
+            //Calculate_Button.IsEnabled = true;
+            //RouterLocation.IsEnabled = true;
         }
     }
 }

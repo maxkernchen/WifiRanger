@@ -49,6 +49,7 @@ namespace WifiRanger
             InitializeComponent();
             DataSet routerDS = this.getRouterData();
             DataRow routerDR;
+         
             numRows = routerDS.Tables[0].Rows.Count;
             RouterData[] routerDataArray = new RouterData[numRows];
             for (int i = 0; i < numRows; i++)
@@ -66,7 +67,7 @@ namespace WifiRanger
 
 
             RouterList.ItemsSource = routerDataArray;
-            String url = "enterwalmartapiurlhere";
+           
             /**
                         XmlTextReader reader = new XmlTextReader(url);
                         String prevElement = "";

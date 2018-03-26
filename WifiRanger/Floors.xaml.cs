@@ -29,13 +29,15 @@ namespace WifiRanger
         private double percentCoverageVal = 0.0;
         private double counter = 0.0;
         private static readonly int INTERFERENCE_CONST = 1;
+        private static readonly int FREQUENCY_INDEX = 0;
+        private static readonly int POWER_INDEX = 1;
         public Floors()
         {
             InitializeComponent();
             Console.WriteLine("init called");
             Console.WriteLine(Application.Current.Properties["Floors"]);
-            Console.WriteLine(this.getRouterFrequency(Application.Current.Properties["SelectedRouter"].ToString()));
-            double meters = this.calculateDistance(-65,this.getRouterFrequency(Application.Current.Properties["SelectedRouter"].ToString()));
+            List<int> powerFreqList = this.getRouterFrequencyPower(Application.Current.Properties["SelectedRouter"].ToString());
+            double meters = this.calculateDistance(powerFreqList[POWER_INDEX],powerFreqList[FREQUENCY_INDEX]);
             Console.WriteLine(meters);
             Console.WriteLine(this.calulateCoverage(meters, Convert.ToDouble(Application.Current.Properties["SQ_Feet"].ToString())));
             percentCoverageVal = this.calulateCoverage(meters, Convert.ToDouble(Application.Current.Properties["SQ_Feet"].ToString()));
@@ -67,9 +69,9 @@ namespace WifiRanger
         }
 
 
-        private double calculateDistance(double levelInDb, double freqInMHz)
+        private double calculateDistance(double power, double freqInMHz)
         {
-            double exp = (27.55 - INTERFERENCE_CONST - (20 * Math.Log10(freqInMHz)) + Math.Abs(levelInDb)) / 20.0;
+            double exp = (27.55 - (20 * Math.Log10(freqInMHz)) + 10 * Math.Log(power)) / 20.0;
             // times 2 to get a better reading, after real world tests. 
             return Math.Pow(10.0, exp);
         }
@@ -100,10 +102,10 @@ namespace WifiRanger
             coverageTimer.Start();
         }
 
-        private int getRouterFrequency(String model)
+        private List<int> getRouterFrequencyPower(String model)
         {
             SqlConnection connection = new SqlConnection(Properties.Settings.Default.RoutersDBConnectionString);
-
+            List<int> frequencyPowerList = new List<int>();
             try
             {
                 connection.Open();
@@ -114,10 +116,15 @@ namespace WifiRanger
                 Console.WriteLine("Can not open connection! " + ex.ToString());
             }
 
-            SqlCommand sql = new SqlCommand(ConfigurationManager.AppSettings["getFrequency"].ToString(), connection);
-            sql.Parameters.AddWithValue("@model", model);
-            int frequency = (int) sql.ExecuteScalar();
-            return frequency;
+            SqlCommand cmdFreq = new SqlCommand(ConfigurationManager.AppSettings["getFrequency"].ToString(), connection);
+            cmdFreq.Parameters.AddWithValue("@model", model);
+            int frequency = (int) cmdFreq.ExecuteScalar();
+            frequencyPowerList.Add(frequency);
+            SqlCommand cmdPower = new SqlCommand(ConfigurationManager.AppSettings["getPower"].ToString(), connection);
+            cmdPower.Parameters.AddWithValue("@model", model);
+            int power = (int)cmdPower.ExecuteScalar();
+            frequencyPowerList.Add(power);
+            return frequencyPowerList;
         }
     }
 }
