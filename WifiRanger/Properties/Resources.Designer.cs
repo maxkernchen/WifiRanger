@@ -73,16 +73,6 @@ namespace WifiRanger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap BackGround1 {
-            get {
-                object obj = ResourceManager.GetObject("BackGround1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap BackGround2 {
             get {
                 object obj = ResourceManager.GetObject("BackGround2", resourceCulture);

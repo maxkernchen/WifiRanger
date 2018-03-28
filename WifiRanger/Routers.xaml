@@ -5,26 +5,26 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WifiRanger"
       mc:Ignorable="d" 
-        Title="WifiRanger" Height="900" Width="800"
+        Title="WifiRanger" Height="640" Width="900"
       Background="AliceBlue">
 
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="Resources/BackGround2.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Resources/BackGround.png" Stretch="UniformToFill"/>
         </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="300"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="500"/>
+            <RowDefinition Height="70"/>
 
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="70" />
 
-            <ColumnDefinition Width="600" />
+            <ColumnDefinition Width="760" />
 
-            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="70" />
 
 
 
@@ -77,13 +77,13 @@
                     </GridViewColumn>
                     <GridViewColumn Header="Model" Width="100" DisplayMemberBinding=
                           "{Binding Model }" />
-                    <GridViewColumn Header="Current Price" Width="100" DisplayMemberBinding=
+                    <GridViewColumn Header="Current Price" Width="150" DisplayMemberBinding=
                           "{Binding Price }" />
-                    <GridViewColumn Header="Store Page" Width="100" >
+                    <GridViewColumn Header="Store Page" Width="200" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Name="urlToContent" >
-                                    <Hyperlink NavigateUri="{Binding URL}" Name="StoreLink"   RequestNavigate="URL_RequestNavigate">
+                                    <Hyperlink NavigateUri="{Binding URL}" Name="StoreLink"  RequestNavigate="URL_RequestNavigate">
                                         <TextBlock Text="Walmart Store Page"/>  
                                     </Hyperlink>
                                 </TextBlock>

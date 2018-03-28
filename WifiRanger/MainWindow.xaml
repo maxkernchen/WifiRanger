@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WifiRanger"
         mc:Ignorable="d"
-        Title="WifiRanger" Height="550" Width="725">
-
+        Title="WifiRanger" Height="640" Width="900" 
+        WindowStartupLocation="Manual" 
+        Left="100" Top="10">
     <DockPanel>
         <Frame x:Name="_NavigationFrame" NavigationUIVisibility="Hidden" />
     </DockPanel>
