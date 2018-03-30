@@ -22,15 +22,17 @@ namespace WifiRanger
     public partial class MainPage : Page
     {
       // private int FloorsVal = 0;
-       private bool entered_SQFoot_Text;
+      // private bool entered_SQFoot_Text;
         private bool Floor_Entered = false;
       
        public MainPage() {
             InitializeComponent();
             //Picked_Floor.IsEnabled = false;
-            entered_SQFoot_Text = false;
+            //entered_SQFoot_Text = false;
             //RouterLocation.IsEnabled = false;
-            SQ_Feet.Foreground = new SolidColorBrush(Colors.Gray);
+            Area_TextBox.Foreground = new SolidColorBrush(Colors.Gray);
+            SQ_Feet_Radio.IsChecked = true;
+            SQ_Meter_Radio.IsChecked = false;
             Calculate_Button.IsEnabled = false;
       
          
@@ -45,7 +47,7 @@ namespace WifiRanger
                // FloorsVal = int.Parse(Picked_Floor.Text.ToString());
                 
                 //Application.Current.Properties["Floors"] = FloorsVal;
-                Application.Current.Properties["SQ_Feet"] = SQ_Feet.Text;
+                Application.Current.Properties["Area"] = Area_TextBox.Text;
                 this.NavigationService.Navigate(new Uri("Floors.xaml", UriKind.Relative));
             }
             else
@@ -60,7 +62,7 @@ namespace WifiRanger
         {
 
             //check that there is at least one item selected 
-            if (Floors.SelectedItem != null && RouterLocation.SelectedItem !=null && SQ_Feet.Text != "")
+            if (Floors.SelectedItem != null && RouterLocation.SelectedItem !=null && Area_TextBox.Text != "")
             {
                 // Picked_Floor.Items.Clear();
                 // Picked_Floor.IsEnabled = true;
@@ -84,11 +86,11 @@ namespace WifiRanger
 
         private void SQ_Feet_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (!entered_SQFoot_Text) {
-                SQ_Feet.Clear();
-                SQ_Feet.Foreground = new SolidColorBrush(Colors.Black);
-                entered_SQFoot_Text = true;
-            }              
+            
+                Area_TextBox.Clear();
+                Area_TextBox.Foreground = new SolidColorBrush(Colors.Black);
+              
+                       
         }
 
         private void Picked_Floor_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -99,10 +101,22 @@ namespace WifiRanger
 
         private void RouterLocation_DropDownClosed(object sender, EventArgs e)
         {
-            if(Floors.SelectedItem != null && RouterLocation.SelectedItem !=null && SQ_Feet.Text != "")
+            if(Floors.SelectedItem != null && RouterLocation.SelectedItem !=null && Area_TextBox.Text != "")
             {
                 Calculate_Button.IsEnabled = true;
             }
+        }
+
+        private void SQ_Meter_Radio_Checked(object sender, RoutedEventArgs e)
+        {
+            Area_TextBox.Foreground = new SolidColorBrush(Colors.Gray);
+            this.Area_TextBox.Text = "Square Meters";
+        }
+
+        private void SQ_Feet_Radio_Checked(object sender, RoutedEventArgs e)
+        {
+            Area_TextBox.Foreground = new SolidColorBrush(Colors.Gray);
+            this.Area_TextBox.Text = "Square Feet";
         }
     }
 }

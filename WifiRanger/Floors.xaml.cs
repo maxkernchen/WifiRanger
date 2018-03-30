@@ -39,8 +39,8 @@ namespace WifiRanger
             List<int> powerFreqList = this.getRouterFrequencyPower(Application.Current.Properties["SelectedRouter"].ToString());
             double meters = this.calculateDistance(powerFreqList[POWER_INDEX],powerFreqList[FREQUENCY_INDEX]);
             Console.WriteLine(meters);
-            Console.WriteLine(this.calulateCoverage(meters, Convert.ToDouble(Application.Current.Properties["SQ_Feet"].ToString())));
-            percentCoverageVal = this.calulateCoverage(meters, Convert.ToDouble(Application.Current.Properties["SQ_Feet"].ToString()));
+            Console.WriteLine(this.calulateCoverage(meters, Convert.ToDouble(Application.Current.Properties["Area"].ToString())));
+            percentCoverageVal = this.calulateCoverage(meters, Convert.ToDouble(Application.Current.Properties["Area"].ToString()));
             coverageTimer = new DispatcherTimer();
             coverageTimer.Interval = new TimeSpan(0, 0, 0,0,10);
             coverageTimer.Tick += CoverageTimer_Tick;
