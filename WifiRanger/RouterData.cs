@@ -48,6 +48,14 @@ namespace WifiRanger
             set { this._URL = value; }
         }
 
+        private int _Area;
+
+        public int Area
+        {
+            get { return this._Area; }
+            set { this._Area = value; }
+        }
+
     }
 }
 

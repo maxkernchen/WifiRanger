@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Drawing;
+using System.Windows.Threading;
 
 namespace WifiRanger
 {
@@ -23,8 +15,13 @@ namespace WifiRanger
     {
       // private int FloorsVal = 0;
       // private bool entered_SQFoot_Text;
-        private bool Floor_Entered = false;
       
+        private static readonly int FLASH_COUNT = 4;
+        private int flashCounter = 0;
+     
+        private DispatcherTimer flashAreaText;
+
+
        public MainPage() {
             InitializeComponent();
             //Picked_Floor.IsEnabled = false;
@@ -34,15 +31,27 @@ namespace WifiRanger
             SQ_Feet_Radio.IsChecked = true;
             SQ_Meter_Radio.IsChecked = false;
             Calculate_Button.IsEnabled = false;
-      
-         
-       
-       }
+            flashAreaText = new DispatcherTimer();
+            flashAreaText.Interval = new TimeSpan(0, 0, 0, 0, 200);
+            flashAreaText.Tick += CoverageTimer_Tick;
 
-        private void Calculate_Button_Click(object sender, RoutedEventArgs e)
+
+
+        }
+
+        private  void Calculate_Button_Click(object sender, RoutedEventArgs e)
         {
-
-            if(Floors.SelectedItem != null)
+           
+            int area = -1;
+            try
+            {
+                area = int.Parse(Area_TextBox.Text);
+            }
+            catch(System.FormatException fe)
+            {
+                Console.WriteLine(fe.Message);
+            }
+            if (Floors.SelectedItem != null && (area >= 1 && area <= 10000))
             {
                // FloorsVal = int.Parse(Picked_Floor.Text.ToString());
                 
@@ -52,8 +61,12 @@ namespace WifiRanger
             }
             else
             {
-               
+                flashCounter = 0;
 
+                flashAreaText.Start();
+
+              //  SpinWait.SpinUntil(() => done == true, 10000);
+                Area_TextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
             }
 
         }
@@ -117,6 +130,25 @@ namespace WifiRanger
         {
             Area_TextBox.Foreground = new SolidColorBrush(Colors.Gray);
             this.Area_TextBox.Text = "Square Feet";
+        }
+        private void CoverageTimer_Tick(object sender, EventArgs e)
+        {
+            if(flashCounter > FLASH_COUNT)
+            {
+                flashAreaText.Stop();
+
+            }
+            else
+            {
+                //alternate between colors
+                if (flashCounter % 2 == 0)
+                    Area_TextBox.Background = new SolidColorBrush(Colors.White);
+                else
+                    Area_TextBox.Background = new SolidColorBrush(Colors.Red);
+                flashCounter++;
+            }
+
+         
         }
     }
 }
