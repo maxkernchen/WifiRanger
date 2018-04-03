@@ -17,6 +17,7 @@ namespace WifiRanger
       // private bool entered_SQFoot_Text;
       
         private static readonly int FLASH_COUNT = 4;
+   
         private int flashCounter = 0;
      
         private DispatcherTimer flashAreaText;
@@ -57,7 +58,16 @@ namespace WifiRanger
                 
                 //Application.Current.Properties["Floors"] = FloorsVal;
                 Application.Current.Properties["Area"] = Area_TextBox.Text;
+                if (SQ_Feet_Radio.IsChecked.Value)
+                    Application.Current.Properties["Unit"] = "Feet";
+                else
+                    Application.Current.Properties["Unit"] = "Meter";
+
+                int floor_num = int.Parse(Floors.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last());
+                Application.Current.Properties["Floors"] = floor_num;
+                Application.Current.Properties["RouterLocation"] = RouterLocation.SelectedIndex;
                 this.NavigationService.Navigate(new Uri("Floors.xaml", UriKind.Relative));
+
             }
             else
             {
@@ -75,7 +85,7 @@ namespace WifiRanger
         {
 
             //check that there is at least one item selected 
-            if (Floors.SelectedItem != null && RouterLocation.SelectedItem !=null && Area_TextBox.Text != "")
+            if (Floors.SelectedItem != null && RouterLocation.SelectedItem !=null)
             {
                 // Picked_Floor.Items.Clear();
                 // Picked_Floor.IsEnabled = true;
@@ -84,8 +94,8 @@ namespace WifiRanger
                     Calculate_Button.IsEnabled = true;
 
                 // just get the int value 
-                int floor_num = int.Parse(Floors.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last());
-                Application.Current.Properties["Floors"] = floor_num;
+               
+
                 // for(int i = 1; i <= floor_num; i++)
                 // {
                 //Picked_Floor.Items.Add(i);
@@ -114,7 +124,7 @@ namespace WifiRanger
 
         private void RouterLocation_DropDownClosed(object sender, EventArgs e)
         {
-            if(Floors.SelectedItem != null && RouterLocation.SelectedItem !=null && Area_TextBox.Text != "")
+            if(Floors.SelectedItem != null && RouterLocation.SelectedItem !=null)
             {
                 Calculate_Button.IsEnabled = true;
             }

@@ -27,20 +27,34 @@ namespace WifiRanger
     {
         private DispatcherTimer coverageTimer;
         private double percentCoverageVal = 0.0;
-        private double counter = 0.0;
-        private static readonly int INTERFERENCE_CONST = 1;
-        private static readonly int FREQUENCY_INDEX = 0;
-        private static readonly int POWER_INDEX = 1;
+        private double counter            = 0.0;
+        private double area               = 0;
+     
+        private static readonly double METERS_TO_FEET = 3.28084;
+        private static readonly int FREQUENCY_INDEX   = 0;
+        private static readonly int POWER_INDEX       = 1;
+       
+        private static readonly int NEAR_CENTER = 0;
+        private static readonly int NEAR_CORNER = 1;
         public Floors()
         {
             InitializeComponent();
             Console.WriteLine("init called");
             Console.WriteLine(Application.Current.Properties["Floors"]);
+            Console.WriteLine(Application.Current.Properties["Unit"]);
+            Console.WriteLine(Application.Current.Properties["RouterLocation"]);
+            int location = (int) Application.Current.Properties["RouterLocation"];
+            
             List<int> powerFreqList = this.getRouterFrequencyPower(Application.Current.Properties["SelectedRouter"].ToString());
-            double meters = this.calculateDistance(powerFreqList[POWER_INDEX],powerFreqList[FREQUENCY_INDEX]);
-            Console.WriteLine(meters);
-            Console.WriteLine(this.calulateCoverage(meters, Convert.ToDouble(Application.Current.Properties["Area"].ToString())));
-            percentCoverageVal = this.calulateCoverage(meters, Convert.ToDouble(Application.Current.Properties["Area"].ToString()));
+            area = Convert.ToDouble(Application.Current.Properties["Area"].ToString());
+          
+            
+            double distanceCovered = this.calculateDistance(powerFreqList[POWER_INDEX],powerFreqList[FREQUENCY_INDEX]);
+            Console.WriteLine(distanceCovered);
+            Console.WriteLine(this.calulateCoverage(distanceCovered, area, Application.Current.Properties
+                ["Unit"].ToString()=="Meter",location));
+            percentCoverageVal = this.calulateCoverage(distanceCovered, area, Application.Current.Properties
+                ["Unit"].ToString() == "Meter",location);
             coverageTimer = new DispatcherTimer();
             coverageTimer.Interval = new TimeSpan(0, 0, 0,0,10);
             coverageTimer.Tick += CoverageTimer_Tick;
@@ -68,31 +82,37 @@ namespace WifiRanger
             
         }
 
-
+        /**
+         * Returns meters
+         */
         private double calculateDistance(double power, double freqInMHz)
         {
             double exp = (27.55 - (20 * Math.Log10(freqInMHz)) + 10 * Math.Log(power)) / 20.0;
-            // times 2 to get a better reading, after real world tests. 
+           
             return Math.Pow(10.0, exp);
         }
-        private double calulateCoverage(double distance,double area)
+        private double calulateCoverage(double distance,double area, bool sqMeters,int location)
         {
-            //sqft to sqmeters
-            //area = area * .3048;
+            if (!sqMeters)
+                distance = distance * METERS_TO_FEET;
+
             double length = (Math.Sqrt(area/70)) * 10;
             double width = (Math.Sqrt(area/70)) * 7;
 
             double lengthCoverage = distance / length;
-            double widthCoverage = distance / width;
+            double coverage = 0.0;
+            if(location == NEAR_CORNER)
+            {
+                double hypoCoverage = Math.Sqrt(Math.Pow(length, 2) + Math.Pow(width, 2));
+                coverage = (distance / hypoCoverage) * 100;
+            }else
+                coverage = (lengthCoverage) * 100;
 
-            double hypoCoverage = Math.Sqrt(Math.Pow(length,2) + Math.Pow(width,2));
-            double cov = (distance / hypoCoverage) * 100;
-            double coverage = (lengthCoverage/2 + widthCoverage/2) * 100;
-            Console.WriteLine(coverage + " cov val");
-            if (cov > 100)
+            
+            if (coverage > 100)
                 return 100;
             else
-                return cov;
+                return coverage;
 
 
         }
