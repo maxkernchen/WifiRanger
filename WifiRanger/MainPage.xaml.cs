@@ -64,7 +64,9 @@ namespace WifiRanger
                     Application.Current.Properties["Unit"] = "Meter";
 
                 int floor_num = int.Parse(Floors.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last());
-                Application.Current.Properties["Floors"] = floor_num;
+
+                ///minus 1 since a one story house does not need to factor in height
+                Application.Current.Properties["Floors"] = floor_num -1;
                 Application.Current.Properties["RouterLocation"] = RouterLocation.SelectedIndex;
                 this.NavigationService.Navigate(new Uri("Floors.xaml", UriKind.Relative));
 

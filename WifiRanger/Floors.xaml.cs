@@ -33,14 +33,15 @@ namespace WifiRanger
         private static readonly double METERS_TO_FEET = 3.28084;
         private static readonly int FREQUENCY_INDEX   = 0;
         private static readonly int POWER_INDEX       = 1;
-       
+        //the height of a floor in meters
+        private static readonly int HEIGHT_METERS_FLOOR = 3;
         private static readonly int NEAR_CENTER = 0;
         private static readonly int NEAR_CORNER = 1;
         public Floors()
         {
             InitializeComponent();
             Console.WriteLine("init called");
-            Console.WriteLine(Application.Current.Properties["Floors"]);
+            int floors = (int) Application.Current.Properties["Floors"];
             Console.WriteLine(Application.Current.Properties["Unit"]);
             Console.WriteLine(Application.Current.Properties["RouterLocation"]);
             int location = (int) Application.Current.Properties["RouterLocation"];
@@ -52,9 +53,9 @@ namespace WifiRanger
             double distanceCovered = this.calculateDistance(powerFreqList[POWER_INDEX],powerFreqList[FREQUENCY_INDEX]);
             Console.WriteLine(distanceCovered);
             Console.WriteLine(this.calulateCoverage(distanceCovered, area, Application.Current.Properties
-                ["Unit"].ToString()=="Meter",location));
+                ["Unit"].ToString()=="Meter",location,floors));
             percentCoverageVal = this.calulateCoverage(distanceCovered, area, Application.Current.Properties
-                ["Unit"].ToString() == "Meter",location);
+                ["Unit"].ToString() == "Meter",location,floors);
             coverageTimer = new DispatcherTimer();
             coverageTimer.Interval = new TimeSpan(0, 0, 0,0,10);
             coverageTimer.Tick += CoverageTimer_Tick;
@@ -83,7 +84,7 @@ namespace WifiRanger
         }
 
         /**
-         * Returns meters
+         * Returns meter's range in one direction 
          */
         private double calculateDistance(double power, double freqInMHz)
         {
@@ -91,21 +92,23 @@ namespace WifiRanger
            
             return Math.Pow(10.0, exp);
         }
-        private double calulateCoverage(double distance,double area, bool sqMeters,int location)
+        private double calulateCoverage(double distanceCovered, double area, bool sqMeters, int location, int numFloors)
         {
+            //subtract the height of each floor from the range 
+            distanceCovered = distanceCovered - (numFloors * HEIGHT_METERS_FLOOR);
             if (!sqMeters)
-                distance = distance * METERS_TO_FEET;
+                distanceCovered = distanceCovered * METERS_TO_FEET;
 
             double length = (Math.Sqrt(area/70)) * 10;
             double width = (Math.Sqrt(area/70)) * 7;
 
-            double lengthCoverage = distance / length;
+            double lengthCoverage = distanceCovered / (length + (numFloors * HEIGHT_METERS_FLOOR)/2);
             double coverage = 0.0;
             if(location == NEAR_CORNER)
             {
                 double hypoCoverage = Math.Sqrt(Math.Pow(length, 2) + Math.Pow(width, 2));
-                coverage = (distance / hypoCoverage) * 100;
-            }else
+                coverage = (distanceCovered / (hypoCoverage + (numFloors * HEIGHT_METERS_FLOOR)/2)) * 100;
+            } else
                 coverage = (lengthCoverage) * 100;
 
             
