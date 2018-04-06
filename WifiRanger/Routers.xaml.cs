@@ -47,26 +47,8 @@ namespace WifiRanger
         public Routers()
         {
             InitializeComponent();
-            DataSet routerDS = this.getRouterData();
-            DataRow routerDR;
-         
-            numRows = routerDS.Tables[0].Rows.Count;
-            RouterData[] routerDataArray = new RouterData[numRows];
-            for (int i = 0; i < numRows; i++)
-            {
-                routerDR = routerDS.Tables[ROUTER_TABLE].Rows[i];
-                routerDataArray[i] = new RouterData
-                {
-                    Name = routerDR.ItemArray.GetValue(ROUTER_NAME).ToString(),
-                    ImageData = LoadImage(routerDR.ItemArray.GetValue(ROUTER_IMAGE).ToString()),
-                    Model = routerDR.ItemArray.GetValue(ROUTER_MODEL).ToString(),
-                    Price = this.getPrice(routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString()),
-                    URL = this.getURL(routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString())
-                };
-            }
-
-
-            RouterList.ItemsSource = routerDataArray;
+            DataSet routerDS = this.getRouterData("");
+            this.updateRouterList(routerDS);
            
             /**
                         XmlTextReader reader = new XmlTextReader(url);
@@ -123,10 +105,10 @@ namespace WifiRanger
 
         }
 
-        private DataSet getRouterData()
+        private DataSet getRouterData(string search)
         {
             SqlConnection connection = new SqlConnection(Properties.Settings.Default.RoutersDBConnectionString);
-
+            DataSet returnedDS = new DataSet();
             try
             {
                 connection.Open();
@@ -136,13 +118,27 @@ namespace WifiRanger
                 //will need to go to log file later
                 Console.WriteLine("Can not open connection! " + ex.ToString());
             }
+            if (search.Length > 0)
+            {
 
-            SqlDataAdapter sqlData = new SqlDataAdapter(Properties.Settings.Default.allRouters, connection);
-            DataSet routerDataSet = new DataSet();
-            // put the data in the dataset and source it back to the Routers table
-            sqlData.Fill(routerDataSet, "Routers");
 
-            return routerDataSet;
+
+                SqlCommand cmdSearch = new SqlCommand(Properties.Settings.Default.searchRouters, connection);
+                cmdSearch.Parameters.AddWithValue("@search", search);
+                
+                SqlDataAdapter sqlDASearch = new SqlDataAdapter();
+                sqlDASearch.SelectCommand = cmdSearch;
+                sqlDASearch.Fill(returnedDS,"Routers");
+
+            }
+            else
+            {
+                SqlDataAdapter sqlData = new SqlDataAdapter(Properties.Settings.Default.allRouters, connection);
+              
+                // put the data in the dataset and source it back to the Routers table
+                sqlData.Fill(returnedDS, "Routers");
+            }
+            return returnedDS;
         }
 
         private string getPrice(string itemid)
@@ -200,6 +196,35 @@ namespace WifiRanger
             {
                 MessageBox.Show("No Internet Connection Found");
             }
+        }
+
+        private void SearchRouters_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Console.WriteLine(SearchRouters.Text.ToString());
+            DataSet searchRouterDS = this.getRouterData(SearchRouters.Text);
+            this.updateRouterList(searchRouterDS);
+        }
+        private void updateRouterList(DataSet routerDS)
+        {
+            DataRow routerDR;
+
+            numRows = routerDS.Tables[0].Rows.Count;
+            RouterData[] routerDataArray = new RouterData[numRows];
+            for (int i = 0; i < numRows; i++)
+            {
+                routerDR = routerDS.Tables[ROUTER_TABLE].Rows[i];
+                routerDataArray[i] = new RouterData
+                {
+                    Name = routerDR.ItemArray.GetValue(ROUTER_NAME).ToString(),
+                    ImageData = LoadImage(routerDR.ItemArray.GetValue(ROUTER_IMAGE).ToString()),
+                    Model = routerDR.ItemArray.GetValue(ROUTER_MODEL).ToString(),
+                    Price = this.getPrice(routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString()),
+                    URL = this.getURL(routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString())
+                };
+            }
+
+
+            RouterList.ItemsSource = routerDataArray;
         }
     }
 

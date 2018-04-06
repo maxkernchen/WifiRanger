@@ -42,5 +42,14 @@ namespace WifiRanger.Properties {
                 return ((string)(this["allRouters"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("select distinct * from Routers where Model like @search OR Name like @search ")]
+        public string searchRouters {
+            get {
+                return ((string)(this["searchRouters"]));
+            }
+        }
     }
 }

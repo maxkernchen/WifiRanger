@@ -13,5 +13,8 @@
     <Setting Name="allRouters" Type="System.String" Scope="Application">
       <Value Profile="(Default)">select * from Routers</Value>
     </Setting>
+    <Setting Name="searchRouters" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">select distinct * from Routers where Model like @search OR Name like @search </Value>
+    </Setting>
   </Settings>
 </SettingsFile>
