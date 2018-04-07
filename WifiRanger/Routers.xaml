@@ -33,7 +33,7 @@
         <Label Content="Select a Router"  Grid.Column ="1" Margin="100,10,0,0" Grid.Row="0" VerticalAlignment="Top" FontSize="30" FontFamily="Cobert" Foreground="Black"/>
         <Label Content="Search: "  Grid.Column ="1" Margin="560,37,0,0" Grid.Row="0" VerticalAlignment="Top" FontSize="15" FontFamily="Cobert" Foreground="Black"/>
         <TextBox Name="SearchRouters" Grid.Column="1" Grid.Row="0" Margin="600,35,0,0" MaxWidth="130" MaxHeight="20" FontFamily="Cobert" FontSize="15" TextChanged="SearchRouters_TextChanged"></TextBox>
-        <ListView x:Name="RouterList"   VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
+        <ListView x:Name="RouterList" GridViewColumnHeader.Click="Column_Click"  VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
 
 
             <ListView.ItemContainerStyle>
@@ -44,6 +44,7 @@
                 </Style>
                 
             </ListView.ItemContainerStyle>
+        
             <ListView.ItemTemplate>
                 <DataTemplate>
                   
@@ -68,7 +69,7 @@
         
                 <GridView AllowsColumnReorder="true" 
               ColumnHeaderToolTip="Router Info"  >
-                    <GridViewColumn Header="Brand" Width="100" DisplayMemberBinding=
+                    <GridViewColumn  Header="Brand" Width="100" DisplayMemberBinding=
                           "{Binding Name }" />
                     <GridViewColumn Header="Image" Width="150" >
                         <GridViewColumn.CellTemplate>
@@ -77,7 +78,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Model" Width="100" DisplayMemberBinding=
+                    <GridViewColumn Header="Model" DisplayMemberBinding=
                           "{Binding Model }" />
                     <GridViewColumn Header="Current Price" Width="150" DisplayMemberBinding=
                           "{Binding Price }" />
