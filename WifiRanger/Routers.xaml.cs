@@ -56,7 +56,7 @@ namespace WifiRanger
             InitializeComponent();
             DataSet routerDS = this.getRouterData();
             this.initalizeRouterList(routerDS);
-           
+
 
             /**
                         XmlTextReader reader = new XmlTextReader(url);
@@ -90,7 +90,7 @@ using (var webClient = new System.Net.WebClient())
     */
 
         }
-        
+
         /**
          * Opens the Image from the resources folder
             @param: String:filename - the name of the file inside the resources folder
@@ -128,25 +128,25 @@ using (var webClient = new System.Net.WebClient())
                 //will need to go to log file later
                 Console.WriteLine("Can not open connection! " + ex.ToString());
             }
-           /* if (search.Length > 0)
-            {
+            /* if (search.Length > 0)
+             {
 
 
 
-                SqlCommand cmdSearch = new SqlCommand(Properties.Settings.Default.searchRouters, connection);
-                cmdSearch.Parameters.AddWithValue("@search", search);
-                
-                SqlDataAdapter sqlDASearch = new SqlDataAdapter();
-                sqlDASearch.SelectCommand = cmdSearch;
-                sqlDASearch.Fill(returnedDS,"Routers");
+                 SqlCommand cmdSearch = new SqlCommand(Properties.Settings.Default.searchRouters, connection);
+                 cmdSearch.Parameters.AddWithValue("@search", search);
 
-            }
-            else
-            {*/
-                SqlDataAdapter sqlData = new SqlDataAdapter(Properties.Settings.Default.allRouters, connection);
-              
-                // put the data in the dataset and source it back to the Routers table
-                sqlData.Fill(returnedDS, "Routers");
+                 SqlDataAdapter sqlDASearch = new SqlDataAdapter();
+                 sqlDASearch.SelectCommand = cmdSearch;
+                 sqlDASearch.Fill(returnedDS,"Routers");
+
+             }
+             else
+             {*/
+            SqlDataAdapter sqlData = new SqlDataAdapter(Properties.Settings.Default.allRouters, connection);
+
+            // put the data in the dataset and source it back to the Routers table
+            sqlData.Fill(returnedDS, "Routers");
             //}
             return returnedDS;
         }
@@ -159,12 +159,13 @@ using (var webClient = new System.Net.WebClient())
                 using (var webClient = new System.Net.WebClient())
                 {
                     String url = "http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString();
-                
-                    var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/"+ itemid+"?format=json&apiKey="+ ConfigurationManager.AppSettings["WalmartKey"].ToString());
+
+                    var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString());
                     var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
                     price = results["salePrice"];
                 }
-            }catch(System.Net.WebException we)
+            }
+            catch (System.Net.WebException we)
             {
                 Console.WriteLine(we.ToString());
                 connectedToInternet = false;
@@ -181,7 +182,7 @@ using (var webClient = new System.Net.WebClient())
                 using (var webClient = new System.Net.WebClient())
                 {
                     String url = "http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString();
-                    
+
                     var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString());
                     var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
                     productUrl = results["productUrl"];
@@ -202,7 +203,8 @@ using (var webClient = new System.Net.WebClient())
             {
                 Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
                 e.Handled = true;
-            }catch(System.InvalidOperationException ioe)
+            }
+            catch (System.InvalidOperationException ioe)
             {
                 MessageBox.Show("No Internet Connection Found");
             }
@@ -210,11 +212,12 @@ using (var webClient = new System.Net.WebClient())
 
         private void SearchRouters_TextChanged(object sender, TextChangedEventArgs e)
         {
-           if(SearchRouters.Text.Length == 0)
+            this.resetSorting();
+            if (SearchRouters.Text.Length == 0)
                 RouterList.ItemsSource = this.routerData;
-            else            
-               this.searchAndUpdateRouters(SearchRouters.Text);
-            
+            else
+                this.searchAndUpdateRouters(SearchRouters.Text.ToLower());
+
         }
         private void initalizeRouterList(DataSet routerDS)
         {
@@ -225,7 +228,7 @@ using (var webClient = new System.Net.WebClient())
             for (int i = 0; i < numRows; i++)
             {
                 routerDR = routerDS.Tables[ROUTER_TABLE].Rows[i];
-              
+
                 routerDataArray[i] = new RouterData
                 {
                     Name = routerDR.ItemArray.GetValue(ROUTER_NAME).ToString(),
@@ -246,7 +249,7 @@ using (var webClient = new System.Net.WebClient())
             List<RouterData> temp = new List<RouterData>();
             for (int i = 0; i < routerData.Length; i++)
             {
-                if (routerData[i].Name.StartsWith(searchTerm) || routerData[i].Model.StartsWith(searchTerm))
+                if (routerData[i].Name.ToLower().StartsWith(searchTerm) || routerData[i].Model.ToLower().StartsWith(searchTerm))
                 {
                     temp.Add(routerData[i]);
                 }
@@ -254,46 +257,34 @@ using (var webClient = new System.Net.WebClient())
 
             RouterList.ItemsSource = temp;
         }
-        private void sortRouters(string column,bool ascending)
+        private void sortRouters(string column, bool ascending)
         {
 
         }
         private void Column_Click(object sender, RoutedEventArgs e)
         {
+            //clear searches 
+            SearchRouters.Clear();
             GridViewColumnHeader columnClicked = e.OriginalSource as GridViewColumnHeader;
+            if (columnClicked == null)
+                return;
+
             Console.WriteLine(columnClicked.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last());
             string column = columnClicked.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last();
             //get rid of the arrows if needed
-           if(column.Contains("\u25BC"))
+            if (column.Contains("\u25BC"))
                 column = column.Split(new string[] { " \u25BC" }, StringSplitOptions.None).First();
-           else if(column.Contains("\u25B2"))
+            else if (column.Contains("\u25B2"))
                 column = column.Split(new string[] { " \u25B2" }, StringSplitOptions.None).First();
-           // see if column is sortable
+            // see if column is sortable
             if (sortableColumns.Contains<string>(column))
             {
                 // check to see if clicked column is different from last sorted column
                 if (lastSorted != column && lastSorted.Length > 0)
-                 {
-                    //get the gridview and then the gridviewcolumns
-                    GridView tempGridViewClear = (GridView)RouterList.View;
-                    GridViewColumnCollection columnsClear = tempGridViewClear.Columns;
-                    //reset all gridviewcolumn headers to be without arrows
-                    foreach(GridViewColumn columnGridViewClear in columnsClear)
-                    {
-                   
-                        //get header string
-                        string tempColumnClear = columnGridViewClear.Header.ToString();
-                        //remove the arrows 
-                        if (tempColumnClear.Contains("\u25BC"))
-                            tempColumnClear = tempColumnClear.Split(new string[] { " \u25BC" }, StringSplitOptions.None).First();
-                        else if (columnGridViewClear.Header.ToString().Contains("\u25B2"))
-                            tempColumnClear = tempColumnClear.Split(new string[] { " \u25B2" }, StringSplitOptions.None).First();
-                        //reset all columns to orginal state
-                        columnGridViewClear.Header = tempColumnClear;
-                        //reset sorting to ascending
-                        this.sortSwitch = false;
+                {
+                    this.resetSorting();
+                    
                 }
-            }
                 //update late sorted column field
                 this.lastSorted = column;
                 //find the header for the clicked column by going through same process as above
@@ -302,12 +293,12 @@ using (var webClient = new System.Net.WebClient())
                 GridViewColumnCollection columns = tempGridView.Columns;
                 foreach (GridViewColumn columnGridView in columns)
                 {
-                    if(columnGridView.Header.ToString().Contains(column))
+                    if (columnGridView.Header.ToString().Contains(column))
                     {
                         tempColumn = columnGridView;
                         break;
                     }
-                    
+
                 }
                 //switch sorting order for clicked column
                 if (sortSwitch)
@@ -323,32 +314,67 @@ using (var webClient = new System.Net.WebClient())
 
         private void sortRouters()
         {
-            RouterData[] tempSorted = new RouterData[routerData.Length];
-            for(int i = 0; i < routerData.Length - 1; i++)
+          
+            if (lastSorted == "Brand")
             {
-                Console.WriteLine(routerData[i].Name.ToString());
-                if(lastSorted == "Brand")
+                if (!sortSwitch)
+                     //lambda for each name field
+                    RouterList.ItemsSource = routerData.OrderBy(obj => obj.Name).ToList();                
+                else                
+                    //go other way
+                    RouterList.ItemsSource = routerData.OrderByDescending(obj => obj.Name).ToList();
+
+            }else if(lastSorted == "Model")
+            {
+                if (!sortSwitch)                   
+                    RouterList.ItemsSource = routerData.OrderBy(obj => obj.Model).ToList();
+                else
+                    RouterList.ItemsSource = routerData.OrderByDescending(obj => obj.Model).ToList();
+
+            }else if(lastSorted == "Current Price")
+            {
+                if (!sortSwitch)
                 {
-                    if (sortSwitch)
-                    {
-                        int compared = String.Compare(routerData[i].Name, routerData[i + 1].Name, StringComparison.Ordinal);
-                        if (compared > 0)
-                        {
-                            tempSorted[i] = routerData[i + 1];
-                            tempSorted[i + 1] = routerData[i];
-                        }
-                        else
-                        {
-                            tempSorted[i] = routerData[i];
-                            tempSorted[i + 1] = routerData[i + 1];
-                        }
-                    }
+                    List<RouterData> removeNoPrice = routerData.OrderBy(obj => obj.Price).ToList();
+                    removeNoPrice.RemoveAll(data => data.Price == "No Price Available");
+                    RouterList.ItemsSource = removeNoPrice;
                 }
+
+                else
+                {
+                    List<RouterData> removeNoPrice = routerData.OrderByDescending(obj => obj.Price).ToList();
+                    removeNoPrice.RemoveAll(data => data.Price == "No Price Available");
+                    RouterList.ItemsSource = removeNoPrice;
+                }
+                   
+
             }
-            
+
+        }
+
+        private void resetSorting()
+        {
+            //get the gridview and then the gridviewcolumns
+            GridView tempGridViewClear = (GridView)RouterList.View;
+            GridViewColumnCollection columnsClear = tempGridViewClear.Columns;
+            //reset all gridviewcolumn headers to be without arrows
+            foreach (GridViewColumn columnGridViewClear in columnsClear)
+            {
+
+                //get header string
+                string tempColumnClear = columnGridViewClear.Header.ToString();
+                //remove the arrows 
+                if (tempColumnClear.Contains("\u25BC"))
+                    tempColumnClear = tempColumnClear.Split(new string[] { " \u25BC" }, StringSplitOptions.None).First();
+                else if (columnGridViewClear.Header.ToString().Contains("\u25B2"))
+                    tempColumnClear = tempColumnClear.Split(new string[] { " \u25B2" }, StringSplitOptions.None).First();
+                //reset all columns to orginal state
+                columnGridViewClear.Header = tempColumnClear;
+                //reset sorting to ascending
+                this.sortSwitch = false;
+            }
         }
     }
-
    
 }
 
