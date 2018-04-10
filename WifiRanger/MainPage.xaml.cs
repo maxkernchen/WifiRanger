@@ -68,7 +68,7 @@ namespace WifiRanger
                 ///minus 1 since a one story house does not need to factor in height
                 Application.Current.Properties["Floors"] = floor_num -1;
                 Application.Current.Properties["RouterLocation"] = RouterLocation.SelectedIndex;
-                this.NavigationService.Navigate(new Uri("Floors.xaml", UriKind.Relative));
+                this.NavigationService.Navigate(new Uri("Coverage.xaml", UriKind.Relative));
 
             }
             else

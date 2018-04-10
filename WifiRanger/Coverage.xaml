@@ -16,14 +16,15 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
+         
         
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
     
-        <Label Content="Percent Coverage :" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Top"/>
+        <Label Content="Percent Coverage :" Grid.Column="0" Grid.Row="1"   HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Top"/>
         <Label Content="0.0%" Name ="PercentCoverage" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="60" VerticalAlignment="Center"/>
-
+        <Image Name="RouterImage" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom"></Image>
     </Grid>
 </Page>

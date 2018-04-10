@@ -46,7 +46,7 @@ namespace WifiRanger
             Console.WriteLine(Application.Current.Properties["RouterLocation"]);
             int location = (int) Application.Current.Properties["RouterLocation"];
             
-            List<int> powerFreqList = this.getRouterFrequencyPower(Application.Current.Properties["SelectedRouter"].ToString());
+            List<int> powerFreqList = this.getRouterData(Application.Current.Properties["SelectedRouter"].ToString());
             area = Convert.ToDouble(Application.Current.Properties["Area"].ToString());
           
             
@@ -125,7 +125,7 @@ namespace WifiRanger
             coverageTimer.Start();
         }
 
-        private List<int> getRouterFrequencyPower(String model)
+        private List<int> getRouterData(String model)
         {
             SqlConnection connection = new SqlConnection(Properties.Settings.Default.RoutersDBConnectionString);
             List<int> frequencyPowerList = new List<int>();
@@ -147,7 +147,13 @@ namespace WifiRanger
             cmdPower.Parameters.AddWithValue("@model", model);
             int power = (int)cmdPower.ExecuteScalar();
             frequencyPowerList.Add(power);
+            SqlCommand cmdImage = new SqlCommand(ConfigurationManager.AppSettings["getImage"].ToString(), connection);
+            cmdImage.Parameters.AddWithValue("@model", model);
+            string imageLocation = (string)cmdImage.ExecuteScalar();
+            //reuse load image method from Routers class
+            RouterImage.Source =  Routers.LoadImage(imageLocation);
             return frequencyPowerList;
         }
+     
     }
 }

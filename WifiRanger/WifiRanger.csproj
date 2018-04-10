@@ -87,7 +87,7 @@
     <Compile Include="Routers.xaml.cs">
       <DependentUpon>Routers.xaml</DependentUpon>
     </Compile>
-    <Page Include="Floors.xaml">
+    <Page Include="Coverage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -103,8 +103,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="ComboEmptyRule.cs" />
-    <Compile Include="Floors.xaml.cs">
-      <DependentUpon>Floors.xaml</DependentUpon>
+    <Compile Include="Coverage.xaml.cs">
+      <DependentUpon>Coverage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

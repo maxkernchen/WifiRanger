@@ -98,7 +98,7 @@ using (var webClient = new System.Net.WebClient())
  
          */
 
-        private BitmapImage LoadImage(string filename)
+        public static BitmapImage LoadImage(string filename)
         {
             return new BitmapImage(new Uri("pack://application:,,,/Resources/" + filename));
         }
@@ -257,10 +257,7 @@ using (var webClient = new System.Net.WebClient())
 
             RouterList.ItemsSource = temp;
         }
-        private void sortRouters(string column, bool ascending)
-        {
-
-        }
+        
         private void Column_Click(object sender, RoutedEventArgs e)
         {
             //clear searches 
