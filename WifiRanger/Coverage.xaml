@@ -9,10 +9,11 @@
       d:DesignHeight="550" d:DesignWidth="725"
       
       Title="Floors"
-      Background="AliceBlue" Loaded="Page_Loaded">
+      Background="White" Loaded="Page_Loaded">
    
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -22,9 +23,16 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-    
-        <Label Content="Percent Coverage :" Grid.Column="0" Grid.Row="1"   HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Top"/>
-        <Label Content="0.0%" Name ="PercentCoverage" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="60" VerticalAlignment="Center"/>
-        <Image Name="RouterImage" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom"></Image>
+        <Label Name ="RouterNameLabel" Grid.Column="0" Grid.Row="0"   HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Top"/>
+
+        <Label Content="Percent Coverage :" Grid.Column="0" Grid.Row="2"  FontFamily="Cobert" HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Top"/>
+        <Label Content="0.0%" Name ="PercentCoverage" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" FontFamily ="Cobert" FontSize="60" VerticalAlignment="Center"/>
+        <Image Name="RouterImage" MaxWidth="170" MaxHeight="170" Opacity="50" Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom"></Image>
+        <TextBlock Grid.Column=" 0" Grid.Row="3" HorizontalAlignment="Center" FontSize="20" FontFamily="Cobert">
+        <Hyperlink NavigateUri="https://www.google.com" Name="StoreLink"  RequestNavigate="URL_RequestNavigate">
+                                        <TextBlock Text="Walmart Store Page"/>
+            </Hyperlink>
+        
+        </TextBlock>
     </Grid>
 </Page>

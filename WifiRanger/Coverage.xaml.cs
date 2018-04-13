@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -152,8 +153,23 @@ namespace WifiRanger
             string imageLocation = (string)cmdImage.ExecuteScalar();
             //reuse load image method from Routers class
             RouterImage.Source =  Routers.LoadImage(imageLocation);
+            RouterNameLabel.Content = model;
             return frequencyPowerList;
         }
-     
+
+        private void URL_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                e.Handled = true;
+            }
+            catch (System.InvalidOperationException ioe)
+            {
+               //send to log file in future.
+                MessageBox.Show("No Internet Connection Found");
+            }
+        }
+
     }
 }
