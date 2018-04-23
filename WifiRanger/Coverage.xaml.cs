@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -144,16 +145,25 @@ namespace WifiRanger
             cmdFreq.Parameters.AddWithValue("@model", model);
             int frequency = (int) cmdFreq.ExecuteScalar();
             frequencyPowerList.Add(frequency);
+
             SqlCommand cmdPower = new SqlCommand(ConfigurationManager.AppSettings["getPower"].ToString(), connection);
             cmdPower.Parameters.AddWithValue("@model", model);
             int power = (int)cmdPower.ExecuteScalar();
             frequencyPowerList.Add(power);
+
             SqlCommand cmdImage = new SqlCommand(ConfigurationManager.AppSettings["getImage"].ToString(), connection);
             cmdImage.Parameters.AddWithValue("@model", model);
             string imageLocation = (string)cmdImage.ExecuteScalar();
+
             //reuse load image method from Routers class
-            RouterImage.Source =  Routers.LoadImage(imageLocation);
-            RouterNameLabel.Content = model;
+            RouterImage.Source =  this.LoadImage(imageLocation);
+            RouterName.Text = model;
+
+            SqlCommand cmdURL = new SqlCommand(ConfigurationManager.AppSettings["getID"].ToString(), connection);
+            cmdURL.Parameters.AddWithValue("@model", model);
+
+            StoreLink.NavigateUri =  new Uri(this.getURL((int)cmdURL.ExecuteScalar()));
+
             return frequencyPowerList;
         }
 
@@ -170,6 +180,33 @@ namespace WifiRanger
                 MessageBox.Show("No Internet Connection Found");
             }
         }
+        private string getURL(int itemid)
+        {
+            String productUrl = "";
+            try
+            {
+                using (var webClient = new System.Net.WebClient())
+                {
+                    String url = "http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString();
+
+                    var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString());
+                    var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
+                    productUrl = results["productUrl"];
+                }
+            }
+            catch (System.Net.WebException we)
+            { 
+                Console.WriteLine(we.ToString());
+            }
+            return productUrl;
+        }
+
+
+        private BitmapImage LoadImage(string filename)
+        {
+            return new BitmapImage(new Uri("pack://application:,,,/Resources/" + filename));
+        }
+
 
     }
 }

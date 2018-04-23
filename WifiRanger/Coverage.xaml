@@ -23,16 +23,19 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Label Name ="RouterNameLabel" Grid.Column="0" Grid.Row="0"   HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Top"/>
-
+      
+            <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center">
+                                    <Hyperlink Name="StoreLink"  RequestNavigate="URL_RequestNavigate" ToolTip="Go to Walmart Store page">
+                                        <TextBlock FontFamily="Cobert" FontSize="30"  Name="RouterName"  Text="Router"/>  
+                                    </Hyperlink>
+                                </TextBlock>
         <Label Content="Percent Coverage :" Grid.Column="0" Grid.Row="2"  FontFamily="Cobert" HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Top"/>
         <Label Content="0.0%" Name ="PercentCoverage" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" FontFamily ="Cobert" FontSize="60" VerticalAlignment="Center"/>
         <Image Name="RouterImage" MaxWidth="170" MaxHeight="170" Opacity="50" Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom"></Image>
-        <TextBlock Grid.Column=" 0" Grid.Row="3" HorizontalAlignment="Center" FontSize="20" FontFamily="Cobert">
-        <Hyperlink NavigateUri="https://www.google.com" Name="StoreLink"  RequestNavigate="URL_RequestNavigate">
-                                        <TextBlock Text="Walmart Store Page"/>
-            </Hyperlink>
-        
-        </TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center">
+                                    <Hyperlink NavigateUri ="https://maxkernchen.github.io/" RequestNavigate="URL_RequestNavigate" ToolTip="Go to project page">
+                                        <TextBlock FontFamily="Cobert" FontSize="20"  Text="How is this calculated?"/>  
+                                    </Hyperlink>
+                                </TextBlock>
     </Grid>
 </Page>

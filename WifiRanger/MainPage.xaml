@@ -75,7 +75,7 @@
         </ComboBox> -->
         <RadioButton Name="SQ_Feet_Radio" Grid.Column="1" Grid.Row="4" Margin="20,10" FontFamily="Cobert" Checked="SQ_Feet_Radio_Checked" FontWeight="Bold">Square Feet</RadioButton>
         <RadioButton Name="SQ_Meter_Radio" Grid.Column="1" Grid.Row="4" Margin="180,10,3,3" Checked="SQ_Meter_Radio_Checked" FontFamily="Cobert" FontWeight="Bold">Square Meters</RadioButton>
-        <Button Name="Calculate_Button" Content="Calculate" Margin="0" Click="Calculate_Button_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5" Height="0" MinWidth="100" MinHeight="37" />
+        <Button Name="Calculate_Button" IsDefault="True" Content="Calculate" Margin="0" Click="Calculate_Button_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5" Height="0" MinWidth="100" MinHeight="37" />
         <Frame x:Name="_NavigationFrame" NavigationUIVisibility="Hidden" />
         <Label Content="Number of Floors" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Top" FontFamily="Cobert" FontSize="14"/>
         <Label Content="Approximate Router Location" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Top" FontSize="14" FontFamily="Cobert"/>

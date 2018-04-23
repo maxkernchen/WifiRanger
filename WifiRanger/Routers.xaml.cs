@@ -98,7 +98,7 @@ using (var webClient = new System.Net.WebClient())
  
          */
 
-        public static BitmapImage LoadImage(string filename)
+        private BitmapImage LoadImage(string filename)
         {
             return new BitmapImage(new Uri("pack://application:,,,/Resources/" + filename));
         }
