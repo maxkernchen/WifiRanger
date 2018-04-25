@@ -55,9 +55,10 @@ namespace WifiRanger
             double distanceCovered = this.calculateDistance(powerFreqList[POWER_INDEX],powerFreqList[FREQUENCY_INDEX]);
             Console.WriteLine(distanceCovered);
             Console.WriteLine(this.calulateCoverage(distanceCovered, area, Application.Current.Properties
-                ["Unit"].ToString()=="Meter",location,floors));
+                ["Unit"].ToString()== "Meter",location,floors));
             percentCoverageVal = this.calulateCoverage(distanceCovered, area, Application.Current.Properties
                 ["Unit"].ToString() == "Meter",location,floors);
+
             coverageTimer = new DispatcherTimer();
             coverageTimer.Interval = new TimeSpan(0, 0, 0,0,10);
             coverageTimer.Tick += CoverageTimer_Tick;
@@ -110,7 +111,8 @@ namespace WifiRanger
             {
                 double hypoCoverage = Math.Sqrt(Math.Pow(length, 2) + Math.Pow(width, 2));
                 coverage = (distanceCovered / (hypoCoverage))* 100;
-            } else
+            }
+            else
                 coverage = (lengthCoverage) * 100;
 
             
@@ -208,5 +210,10 @@ namespace WifiRanger
         }
 
 
+        private void startOverBtn_Click(object sender, RoutedEventArgs e)
+        {
+            
+            this.NavigationService.Navigate(new Uri("Routers.xaml", UriKind.Relative));
+        }
     }
 }

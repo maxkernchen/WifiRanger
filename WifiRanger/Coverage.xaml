@@ -37,5 +37,13 @@
                                         <TextBlock FontFamily="Cobert" FontSize="20"  Text="How is this calculated?"/>  
                                     </Hyperlink>
                                 </TextBlock>
+
+        <Button Name="startOverBtn" Grid.Column="0" Grid.Row="4" Width="100" Height="50" Background="LightBlue" BorderBrush="AntiqueWhite" BorderThickness="2" Click="startOverBtn_Click">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="Resources/backIcon.png" Width="20" Height="20"/>
+                <TextBlock Text=" Start Over" VerticalAlignment="Center" />
+            </StackPanel>
+        </Button>
+
     </Grid>
 </Page>

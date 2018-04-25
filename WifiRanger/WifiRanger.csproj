@@ -161,6 +161,7 @@
     <Resource Include="Resources\N750_IMG.jpeg" />
     <Resource Include="Resources\BackGround2.png" />
     <Resource Include="Resources\BackGround.png" />
+    <Resource Include="Resources\backIcon.png" />
     <Content Include="routersdb.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
