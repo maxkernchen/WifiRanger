@@ -1,23 +1,15 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace WifiRanger
@@ -31,28 +23,34 @@ namespace WifiRanger
         private double percentCoverageVal = 0.0;
         private double counter            = 0.0;
         private double area               = 0;
+        private Boolean highPower = false;
      
         private static readonly double METERS_TO_FEET = 3.28084;
         private static readonly int FREQUENCY_INDEX   = 0;
         private static readonly int POWER_INDEX       = 1;
+        private static readonly int LOW_POWER_DBM     = 57;
+        private static readonly int HIGH_POWER_DBM    = 58;
         //the height of a floor in meters
         private static readonly int HEIGHT_METERS_FLOOR = 3;
-        private static readonly int NEAR_CENTER = 0;
-        private static readonly int NEAR_CORNER = 1;
+        private static readonly int NEAR_CENTER         = 0;
+        private static readonly int NEAR_CORNER         = 1;
         public Floors()
         {
             InitializeComponent();
+            NavigationCommands.BrowseBack.InputGestures.Clear();
+            NavigationCommands.BrowseForward.InputGestures.Clear();
             Console.WriteLine("init called");
-            int floors = (int) Application.Current.Properties["Floors"];
+            int floors = (int)Application.Current.Properties["Floors"];
             Console.WriteLine(Application.Current.Properties["Unit"]);
             Console.WriteLine(Application.Current.Properties["RouterLocation"]);
-            int location = (int) Application.Current.Properties["RouterLocation"];
-            
+            int location = (int)Application.Current.Properties["RouterLocation"];
+
             List<int> powerFreqList = this.getRouterData(Application.Current.Properties["SelectedRouter"].ToString());
             area = Convert.ToDouble(Application.Current.Properties["Area"].ToString());
-          
-            
-            double distanceCovered = this.calculateDistance(powerFreqList[POWER_INDEX],powerFreqList[FREQUENCY_INDEX]);
+
+            double power = this.milliWatt_To_Dbm(powerFreqList[POWER_INDEX]);
+
+            double distanceCovered = this.calculateDistance(powerFreqList[POWER_INDEX], powerFreqList[FREQUENCY_INDEX]);
             Console.WriteLine(distanceCovered);
             Console.WriteLine(this.calulateCoverage(distanceCovered, area, Application.Current.Properties
                 ["Unit"].ToString()== "Meter",location,floors));
@@ -91,8 +89,14 @@ namespace WifiRanger
          */
         private double calculateDistance(double power, double freqInMHz)
         {
-            double exp = (27.55 - (20 * Math.Log10(freqInMHz)) + 10 * Math.Log(power)) / 20.0;
-           
+            double exp = 0;
+            if(!highPower)
+                //free path loss formula with natual log of power added, to better estimate based upon real world observations 
+                exp = (27.55 - (20 * Math.Log10(freqInMHz)) + LOW_POWER_DBM + Math.Log(power)) / 20.0;
+           else
+                //add a bit more signal buffer for high power routers 
+                exp = (27.55 - (20 * Math.Log10(freqInMHz)) + HIGH_POWER_DBM + Math.Log(power)) / 20.0;
+
             return Math.Pow(10.0, exp);
         }
         private double calulateCoverage(double distanceCovered, double area, bool sqMeters, int location, int numFloors)
@@ -157,14 +161,18 @@ namespace WifiRanger
             cmdImage.Parameters.AddWithValue("@model", model);
             string imageLocation = (string)cmdImage.ExecuteScalar();
 
-            //reuse load image method from Routers class
             RouterImage.Source =  this.LoadImage(imageLocation);
             RouterName.Text = model;
 
             SqlCommand cmdURL = new SqlCommand(ConfigurationManager.AppSettings["getID"].ToString(), connection);
             cmdURL.Parameters.AddWithValue("@model", model);
+            StoreLink.NavigateUri = new Uri(this.getURL((int)cmdURL.ExecuteScalar()));
 
-            StoreLink.NavigateUri =  new Uri(this.getURL((int)cmdURL.ExecuteScalar()));
+            SqlCommand cmdHighPower = new SqlCommand(ConfigurationManager.AppSettings["getIsHighPower"].ToString(), connection);
+            cmdHighPower.Parameters.AddWithValue("@model", model);
+
+            highPower = (Byte)cmdHighPower.ExecuteScalar() == 1;
+            
 
             return frequencyPowerList;
         }
@@ -214,6 +222,11 @@ namespace WifiRanger
         {
             
             this.NavigationService.Navigate(new Uri("Routers.xaml", UriKind.Relative));
+        }
+
+        private double milliWatt_To_Dbm(double milliWatts)
+        {
+            return 10 * Math.Log10(milliWatts / 1);
         }
     }
 }

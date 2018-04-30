@@ -49,7 +49,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -102,7 +101,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ComboEmptyRule.cs" />
     <Compile Include="Coverage.xaml.cs">
       <DependentUpon>Coverage.xaml</DependentUpon>
     </Compile>
@@ -162,6 +160,14 @@
     <Resource Include="Resources\BackGround2.png" />
     <Resource Include="Resources\BackGround.png" />
     <Resource Include="Resources\backIcon.png" />
+    <Resource Include="Resources\nighthawk_ac1900.jpeg" />
+    <Resource Include="Resources\ac1350.jpeg" />
+    <Resource Include="Resources\D-Link_AC1200.jpeg" />
+    <Resource Include="Resources\ASUS_RT.jpeg" />
+    <Resource Include="Resources\Tenda_AC9.png" />
+    <Resource Include="Resources\Netgear_AC2300.jpeg" />
+    <Resource Include="Resources\Netgear_AC3200.jpeg" />
+    <Resource Include="Resources\TP_WR841.jpeg" />
     <Content Include="routersdb.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

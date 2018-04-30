@@ -1,31 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WifiRanger
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// This class just holds the Window class which is needed for starting up the applications
     /// </summary>
     public partial class MainWindow : Window
     {
-       
+       /// <summary>
+       /// Construtor which sends us to the Router Page on start up
+       /// </summary>
         public MainWindow()
         {
             InitializeComponent();
              
             _NavigationFrame.Navigate(new Routers());
+            //remove back and forward short cut buttons
+            NavigationCommands.BrowseBack.InputGestures.Clear();
+            NavigationCommands.BrowseForward.InputGestures.Clear();
 
         }
 

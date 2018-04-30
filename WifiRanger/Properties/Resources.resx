@@ -133,4 +133,28 @@
   <data name="BackGround" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BackGround.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="nighthawk_ac1900" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\nighthawk_ac1900.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ac1350" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ac1350.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ASUS_RT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ASUS_RT.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="D_Link_AC1200" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\D-Link_AC1200.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Netgear_AC2300" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Netgear_AC2300.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Netgear_AC3200" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Netgear_AC3200.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Tenda_AC9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tenda_AC9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TP_WR841" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TP_WR841.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

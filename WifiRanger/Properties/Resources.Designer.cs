@@ -63,6 +63,26 @@ namespace WifiRanger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap ac1350 {
+            get {
+                object obj = ResourceManager.GetObject("ac1350", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ASUS_RT {
+            get {
+                object obj = ResourceManager.GetObject("ASUS_RT", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap BackGround {
             get {
                 object obj = ResourceManager.GetObject("BackGround", resourceCulture);
@@ -83,9 +103,49 @@ namespace WifiRanger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap D_Link_AC1200 {
+            get {
+                object obj = ResourceManager.GetObject("D_Link_AC1200", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap N750_IMG {
             get {
                 object obj = ResourceManager.GetObject("N750_IMG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Netgear_AC2300 {
+            get {
+                object obj = ResourceManager.GetObject("Netgear_AC2300", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Netgear_AC3200 {
+            get {
+                object obj = ResourceManager.GetObject("Netgear_AC3200", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap nighthawk_ac1900 {
+            get {
+                object obj = ResourceManager.GetObject("nighthawk_ac1900", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +163,29 @@ namespace WifiRanger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Tenda_AC9 {
+            get {
+                object obj = ResourceManager.GetObject("Tenda_AC9", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap TL_WR940N_IMG {
             get {
                 object obj = ResourceManager.GetObject("TL_WR940N_IMG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap TP_WR841 {
+            get {
+                object obj = ResourceManager.GetObject("TP_WR841", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

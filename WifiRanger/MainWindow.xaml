@@ -8,6 +8,7 @@
         Title="WifiRanger" Height="640" Width="900" 
         WindowStartupLocation="Manual" 
         Left="100" Top="10">
+    <!--This layout only holds the routers page-->
     <DockPanel>
         <Frame x:Name="_NavigationFrame" NavigationUIVisibility="Hidden" />
     </DockPanel>

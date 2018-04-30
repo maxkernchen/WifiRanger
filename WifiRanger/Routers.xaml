@@ -9,6 +9,7 @@
       Background="AliceBlue">
 
     <Grid>
+        <!-- Define the rows/columns for the layout-->
         <Grid.Background>
             <ImageBrush ImageSource="Resources/BackGround.png" Stretch="UniformToFill"/>
         </Grid.Background>
@@ -16,57 +17,55 @@
             <RowDefinition Height="70"/>
             <RowDefinition Height="500"/>
             <RowDefinition Height="70"/>
-
-
         </Grid.RowDefinitions>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70" />
-
             <ColumnDefinition Width="760" />
-
             <ColumnDefinition Width="70" />
-
-
-
-
         </Grid.ColumnDefinitions>
-        <Label Content="Select a Router"  Grid.Column ="1" Margin="100,10,0,0" Grid.Row="0" VerticalAlignment="Top" FontSize="30" FontFamily="Cobert" Foreground="Black"/>
-        <Label Content="Search: "  Grid.Column ="1" Margin="560,37,0,0" Grid.Row="0" VerticalAlignment="Top" FontSize="15" FontFamily="Cobert" Foreground="Black"/>
-        <TextBox Name="SearchRouters" Grid.Column="1" Grid.Row="0" Margin="600,35,0,0" MaxWidth="130" MaxHeight="20" FontFamily="Cobert" FontSize="15" TextChanged="SearchRouters_TextChanged"></TextBox>
-        <ListView x:Name="RouterList" GridViewColumnHeader.Click="Column_Click"  VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
+        
+        <!-- Create labels and textboxes for the top of the UI-->
+        <Label Content="Select a Router"  Grid.Column ="1" Margin="100,10,0,0" Grid.Row="0" VerticalAlignment="Top" 
+               FontSize="30" FontFamily="Cobert" Foreground="Black"/>
+        
+        <Label Content="Search: "  Grid.Column ="1" Margin="560,37,0,0" Grid.Row="0" VerticalAlignment="Top" FontSize="15"
+               FontFamily="Cobert" Foreground="Black"/>
+        
+        <TextBox Name="SearchRouters" Grid.Column="1" Grid.Row="0" Margin="600,35,0,0" MaxWidth="130" MaxHeight="20" 
+                 FontFamily="Cobert" FontSize="15" TextChanged="SearchRouters_TextChanged"></TextBox>
+        <!--Creat the list view which holds the routers-->
+        <ListView x:Name="RouterList" GridViewColumnHeader.Click="Column_Click"  VerticalAlignment="Top"
+                  Grid.Column="1" Grid.Row="1" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
 
 
             <ListView.ItemContainerStyle>
+                <!--Create listener for when each router is clicked-->
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                     <EventSetter Event="MouseUp" Handler="RouterItem_MouseUp" />
-                    
+
                 </Style>
-                
+
             </ListView.ItemContainerStyle>
-        
+            <!--Data template for mapping 4 columns to the RouterData class-->
             <ListView.ItemTemplate>
                 <DataTemplate>
-                  
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" MouseUp="RouterItem_MouseUp">
 
-                            <TextBlock Text="{Binding Name}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <Image Source="{Binding ImageData}" Width ="80" Height="80"  Stretch="UniformToFill" />
-                            <TextBlock Text="{Binding Model}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Price}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" MouseUp="RouterItem_MouseUp">
 
+                        <TextBlock Text="{Binding Name}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Image Source="{Binding ImageData}" Width ="80" Height="80"  Stretch="UniformToFill" />
+                        <TextBlock Text="{Binding Model}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Price}" FontFamily="Cobert" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-                        </StackPanel>
-                   
+                    </StackPanel>
                 </DataTemplate>
-                
 
-
-
-            </ListView.ItemTemplate> 
+            </ListView.ItemTemplate>
 
             <ListView.View>
-        
+                <!--Grid View which contains the 5 columns in the list view for each router-->
                 <GridView AllowsColumnReorder="true" 
               ColumnHeaderToolTip="Router Info"  >
                     <GridViewColumn  Header="Brand" Width="100" DisplayMemberBinding=
@@ -78,9 +77,9 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Model" DisplayMemberBinding=
+                    <GridViewColumn Header="Model" Width="150" DisplayMemberBinding=
                           "{Binding Model }" />
-                    <GridViewColumn Header="Current Price" Width="150" DisplayMemberBinding=
+                    <GridViewColumn Header="Current Price" Width="100" DisplayMemberBinding=
                           "{Binding Price }" />
                     <GridViewColumn Header="Store Page" Width="200" >
                         <GridViewColumn.CellTemplate>
@@ -94,48 +93,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
-              
-                
             </ListView.View>
         </ListView>
-        
-        
-<!---
-        <DataGrid Name="RouterList" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" BorderThickness=".2">
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver"
-                           Value="True">
-                            <Setter Property="Background"
-                               Value="AliceBlue" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.RowStyle>
-            <DataGrid.ItemContainerStyle>
-                <Style TargetType="DataGridRow">
-                    <EventSetter Event="MouseUp" Handler="RouterItem_MouseUp"/>
-                </Style>
-            </DataGrid.ItemContainerStyle>
-            <DataGrid.Columns>
-                
-                <DataGridTemplateColumn Header="Brand" Width="100" IsReadOnly="True">
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Image" Width="100" IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding ImageData}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        -->
     </Grid>
 </Page>
