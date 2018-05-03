@@ -9,14 +9,14 @@ namespace WifiRanger
     class RouterData
     {
         // the brand name of the router
-        private string _Name;
+        private string _Brand;
         /// <summary>
         /// gets or sets the brand name of the router
         /// </summary>
-        public string Name
+        public string Brand
         {
-            get { return this._Name; }
-            set { this._Name = value; }
+            get { return this._Brand; }
+            set { this._Brand = value; }
         }
         // the image of the router
         private BitmapImage _ImageData;

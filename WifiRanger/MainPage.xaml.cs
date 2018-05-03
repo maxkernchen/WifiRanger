@@ -10,7 +10,7 @@ using System.Windows.Threading;
 namespace WifiRanger
 {
     /// <summary>
-    /// MainPage class which holds the inputs for calclating the router's range
+    /// MainPage class which holds the inputs for calculating the router's range
     /// </summary>
     public partial class MainPage : Page
     {
@@ -23,7 +23,7 @@ namespace WifiRanger
         private DispatcherTimer flashAreaText;
 
         /// <summary>
-        /// Constuctor which sets up inital textboxes and is buttons or combo boxes are enabled
+        /// Constuctor which sets up inital textboxes and if buttons or combo boxes are enabled
         /// </summary>
        public MainPage() {
             InitializeComponent();
@@ -42,7 +42,7 @@ namespace WifiRanger
             flashAreaText.Tick += CoverageTimer_Tick;
         }
         /// <summary>
-        /// Event listener for the Caluclate button click
+        /// Event listener for the Calculate button click
         /// </summary>
         /// <param name="sender">the object which sent the event, not used in this case</param>
         /// <param name="e">arguments from the event, not used in this case</param>
@@ -112,7 +112,12 @@ namespace WifiRanger
                 Area_TextBox.Clear();
                 Area_TextBox.Foreground = new SolidColorBrush(Colors.Black);                      
         }
-
+        /// <summary>
+        /// Checks if the router location drop down was closed, 
+        /// then enabled the calculate button if the floors drop down also contains a selection
+        /// </summary>
+        /// <param name="sender">where the event came from, not used in this case</param>
+        /// <param name="e">arguments for the event, not used in this case</param>
         private void RouterLocation_DropDownClosed(object sender, EventArgs e)
         {
             if(Floors.SelectedItem != null && RouterLocation.SelectedItem !=null)
@@ -120,25 +125,36 @@ namespace WifiRanger
                 Calculate_Button.IsEnabled = true;
             }
         }
-
+        /// <summary>
+        /// if the meters radio button is clicked set the placeholder back
+        /// </summary>
+        /// <param name="sender">where the event came from, not used in this case</param>
+        /// <param name="e">arguments for the event, not used in this case</param>
         private void SQ_Meter_Radio_Checked(object sender, RoutedEventArgs e)
         {
             Area_TextBox.Foreground = new SolidColorBrush(Colors.Gray);
             this.Area_TextBox.Text = "Square Meters";
         }
-
+        /// <summary>
+        /// if the square feet radio button is clicked set the placeholder back
+        /// </summary>
+        /// <param name="sender">where the event came from, not used in this case</param>
+        /// <param name="e">arguments for the event, not used in this case</param>
         private void SQ_Feet_Radio_Checked(object sender, RoutedEventArgs e)
         {
             Area_TextBox.Foreground = new SolidColorBrush(Colors.Gray);
             this.Area_TextBox.Text = "Square Feet";
         }
+        /// <summary>
+        /// A tick method for the dispatcher timer which flashes the area textbox red 
+        /// when there is invalid input
+        /// </summary>
+        /// <param name="sender">where the event came from, not used in this case</param>
+        /// <param name="e">arguments for the event, not used in this case</param>
         private void CoverageTimer_Tick(object sender, EventArgs e)
         {
-            if(flashCounter > FLASH_COUNT)
-            {
+            if (flashCounter > FLASH_COUNT)
                 flashAreaText.Stop();
-
-            }
             else
             {
                 //alternate between colors
@@ -148,8 +164,6 @@ namespace WifiRanger
                     Area_TextBox.Background = new SolidColorBrush(Colors.Red);
                 flashCounter++;
             }
-
-         
         }
     }
 }

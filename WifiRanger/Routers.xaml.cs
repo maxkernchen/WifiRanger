@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Configuration;
+using System.Data.SQLite;
 using System.Data;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -23,14 +23,14 @@ namespace WifiRanger
     {
         //number of rows in router database
         private int numRows;
-        // the column that contains the Router Name
-        private static readonly int ROUTER_NAME = 1;
+        // the column that contains the Router Brand
+        private static readonly int ROUTER_BRAND = 0;
         // the column that contains the Router Model name and number
-        private static readonly int ROUTER_MODEL = 2;
+        private static readonly int ROUTER_MODEL = 1;
         // the column that contains the Router Model name and number
-        private static readonly int ROUTER_ITEM_ID = 4;
+        private static readonly int ROUTER_ITEM_ID = 3;
         // the column that contains the name of the ImageFile for the router
-        private static readonly int ROUTER_IMAGE = 6;
+        private static readonly int ROUTER_IMAGE = 5;
         // location of Router table in router database
         private static readonly int ROUTER_TABLE = 0;
         //the last column which was sorted
@@ -90,7 +90,7 @@ namespace WifiRanger
         /// <returns>a SQL DataSet with all the routers in it</returns>
         private DataSet getRouterData()
         {
-            SqlConnection connection = new SqlConnection(Properties.Settings.Default.RoutersDBConnectionString);
+            SQLiteConnection connection = new SQLiteConnection(Properties.Settings.Default.RoutersDBConnectionString);
             DataSet returnedDS = new DataSet();
             try
             {
@@ -103,9 +103,9 @@ namespace WifiRanger
 
             }
 
-            SqlDataAdapter sqlData = new SqlDataAdapter(Properties.Settings.Default.allRouters, connection);
+            SQLiteDataAdapter sqlData = new SQLiteDataAdapter(Properties.Settings.Default.allRouters, connection);
             // put the data in the dataset and source it back to the Routers table
-            sqlData.Fill(returnedDS, "Routers");
+            sqlData.Fill(returnedDS);
             
             return returnedDS;
         }
@@ -226,7 +226,7 @@ namespace WifiRanger
 
                 routerDataArray[i] = new RouterData
                 {
-                    Name = routerDR.ItemArray.GetValue(ROUTER_NAME).ToString(),
+                    Brand = routerDR.ItemArray.GetValue(ROUTER_BRAND).ToString(),
                     ImageData = LoadImage(routerDR.ItemArray.GetValue(ROUTER_IMAGE).ToString()),
                     Model = routerDR.ItemArray.GetValue(ROUTER_MODEL).ToString(),
                     Price = this.getPrice(routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString()),
@@ -248,7 +248,7 @@ namespace WifiRanger
             for (int i = 0; i < routerData.Length; i++)
             {
                 // Brand or Model contains the search term add it to he result list
-                if (routerData[i].Name.ToLower().Contains(searchTerm) || routerData[i].Model.ToLower().Contains(searchTerm))
+                if (routerData[i].Brand.ToLower().Contains(searchTerm) || routerData[i].Model.ToLower().Contains(searchTerm))
                 {
                     searchResults.Add(routerData[i]);
                 }
@@ -319,10 +319,10 @@ namespace WifiRanger
             {
                 if (!sortSwitch)
                      //lambda for each name field
-                    RouterList.ItemsSource = routerData.OrderBy(obj => obj.Name).ToList();                
+                    RouterList.ItemsSource = routerData.OrderBy(obj => obj.Brand).ToList();                
                 else                
                     //go other way
-                    RouterList.ItemsSource = routerData.OrderByDescending(obj => obj.Name).ToList();
+                    RouterList.ItemsSource = routerData.OrderByDescending(obj => obj.Brand).ToList();
 
             }
             else if(lastSorted == "Model")

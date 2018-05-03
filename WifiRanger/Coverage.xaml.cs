@@ -2,7 +2,6 @@
 using System;
 using System.Configuration;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,13 +10,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using System.Data.SQLite;
 
 namespace WifiRanger
 {
     /// <summary>
     /// Interaction logic for Floors.xaml
     /// </summary>
-    public partial class Floors : Page
+    public partial class Coverage : Page
     {
         private DispatcherTimer coverageTimer;
         private double percentCoverageVal = 0.0;
@@ -34,7 +34,7 @@ namespace WifiRanger
         private static readonly int HEIGHT_METERS_FLOOR = 3;
         private static readonly int NEAR_CENTER         = 0;
         private static readonly int NEAR_CORNER         = 1;
-        public Floors()
+        public Coverage()
         {
             InitializeComponent();
             NavigationCommands.BrowseBack.InputGestures.Clear();
@@ -45,7 +45,7 @@ namespace WifiRanger
             Console.WriteLine(Application.Current.Properties["RouterLocation"]);
             int location = (int)Application.Current.Properties["RouterLocation"];
 
-            List<int> powerFreqList = this.getRouterData(Application.Current.Properties["SelectedRouter"].ToString());
+            List<long> powerFreqList = this.getRouterData(Application.Current.Properties["SelectedRouter"].ToString());
             area = Convert.ToDouble(Application.Current.Properties["Area"].ToString());
 
             double power = this.milliWatt_To_Dbm(powerFreqList[POWER_INDEX]);
@@ -133,10 +133,10 @@ namespace WifiRanger
             coverageTimer.Start();
         }
 
-        private List<int> getRouterData(String model)
+        private List<long> getRouterData(String model)
         {
-            SqlConnection connection = new SqlConnection(Properties.Settings.Default.RoutersDBConnectionString);
-            List<int> frequencyPowerList = new List<int>();
+            SQLiteConnection connection = new SQLiteConnection(Properties.Settings.Default.RoutersDBConnectionString);
+            List<long> frequencyPowerList = new List<long>();
             try
             {
                 connection.Open();
@@ -147,31 +147,39 @@ namespace WifiRanger
                 Console.WriteLine("Can not open connection! " + ex.ToString());
             }
 
-            SqlCommand cmdFreq = new SqlCommand(ConfigurationManager.AppSettings["getFrequency"].ToString(), connection);
+            SQLiteCommand cmdFreq = new SQLiteCommand(ConfigurationManager.AppSettings["getFrequency"].ToString(), connection);
             cmdFreq.Parameters.AddWithValue("@model", model);
-            int frequency = (int) cmdFreq.ExecuteScalar();
-            frequencyPowerList.Add(frequency);
+            long frequency =  (long) cmdFreq.ExecuteScalar();
+           frequencyPowerList.Add(frequency);
 
-            SqlCommand cmdPower = new SqlCommand(ConfigurationManager.AppSettings["getPower"].ToString(), connection);
+            SQLiteCommand cmdPower = new SQLiteCommand(ConfigurationManager.AppSettings["getPower"].ToString(), connection);
             cmdPower.Parameters.AddWithValue("@model", model);
-            int power = (int)cmdPower.ExecuteScalar();
+            long power = (long)cmdPower.ExecuteScalar();
             frequencyPowerList.Add(power);
 
-            SqlCommand cmdImage = new SqlCommand(ConfigurationManager.AppSettings["getImage"].ToString(), connection);
+            SQLiteCommand cmdImage = new SQLiteCommand(ConfigurationManager.AppSettings["getImage"].ToString(), connection);
             cmdImage.Parameters.AddWithValue("@model", model);
             string imageLocation = (string)cmdImage.ExecuteScalar();
 
             RouterImage.Source =  this.LoadImage(imageLocation);
             RouterName.Text = model;
 
-            SqlCommand cmdURL = new SqlCommand(ConfigurationManager.AppSettings["getID"].ToString(), connection);
+            SQLiteCommand cmdURL = new SQLiteCommand(ConfigurationManager.AppSettings["getID"].ToString(), connection);
             cmdURL.Parameters.AddWithValue("@model", model);
-            StoreLink.NavigateUri = new Uri(this.getURL((int)cmdURL.ExecuteScalar()));
+            try
+            {
+                StoreLink.NavigateUri = new Uri(this.getURL((long)cmdURL.ExecuteScalar()));
+            }catch(UriFormatException ufe)
+            {
+                MessageBox.Show("There is no internet connection, store links will not be available");
+                Debug.WriteLine(ufe.Message);
+            }
+           
 
-            SqlCommand cmdHighPower = new SqlCommand(ConfigurationManager.AppSettings["getIsHighPower"].ToString(), connection);
+            SQLiteCommand cmdHighPower = new SQLiteCommand(ConfigurationManager.AppSettings["getIsHighPower"].ToString(), connection);
             cmdHighPower.Parameters.AddWithValue("@model", model);
 
-            highPower = (Byte)cmdHighPower.ExecuteScalar() == 1;
+            highPower =  (long)cmdHighPower.ExecuteScalar() == 1;
             
 
             return frequencyPowerList;
@@ -179,18 +187,25 @@ namespace WifiRanger
 
         private void URL_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            try
+            if (e.Uri.AbsoluteUri.Length > 0)
             {
-                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-                e.Handled = true;
-            }
-            catch (System.InvalidOperationException ioe)
-            {
-               //send to log file in future.
-                MessageBox.Show("No Internet Connection Found");
+                try
+                {
+                    Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                    e.Handled = true;
+                }
+                catch (System.UriFormatException ufe)
+                {
+                    Debug.WriteLine(ufe.Message);
+                }
+                catch (System.InvalidOperationException ioe)
+                {
+                    //send to log file in future.
+                    MessageBox.Show("No Internet Connection Found");
+                }
             }
         }
-        private string getURL(int itemid)
+        private string getURL(long itemid)
         {
             String productUrl = "";
             try
