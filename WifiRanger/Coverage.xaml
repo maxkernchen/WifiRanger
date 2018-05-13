@@ -23,21 +23,24 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-      
+      <!-- Text block for the model of the router displayed at the top of the page-->
             <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center">
                                     <Hyperlink Name="StoreLink"  RequestNavigate="URL_RequestNavigate" ToolTip="Go to Walmart Store page">
                                         <TextBlock FontFamily="Cobert" FontSize="30"  Name="RouterName"  Text="Router"/>  
                                     </Hyperlink>
                                 </TextBlock>
-        <Label Content="Estimated Coverage :" Grid.Column="0" Grid.Row="2"  FontFamily="Cobert" HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Top"/>
+        <!-- Label for percent of covereage-->
+        <Label Content="Estimated Coverage:" Grid.Column="0" Grid.Row="2"  FontFamily="Cobert" HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Top"/>
         <Label Content="0.0%" Name ="PercentCoverage" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" FontFamily ="Cobert" FontSize="60" VerticalAlignment="Center"/>
+        <!-- The image of the router below the percent covered -->
         <Image Name="RouterImage" MaxWidth="170" MaxHeight="170" Opacity="50" Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom"></Image>
+        <!--How this is calculated link to website -->
         <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center">
-                                    <Hyperlink NavigateUri ="https://maxkernchen.github.io/" RequestNavigate="URL_RequestNavigate" ToolTip="Go to project page">
+                                    <Hyperlink NavigateUri ="https://maxkernchen.github.io/projects.html#wifiranger_calc" RequestNavigate="URL_RequestNavigate" ToolTip="Go to project page">
                                         <TextBlock FontFamily="Cobert" FontSize="20"  Text="How is this calculated?"/>  
                                     </Hyperlink>
                                 </TextBlock>
-
+        <!-- The start over button which sends the user back to the routers start page-->
         <Button Name="startOverBtn" Grid.Column="0" Grid.Row="4" Width="100" Height="50" Background="LightBlue" BorderBrush="AntiqueWhite" BorderThickness="2" Click="startOverBtn_Click">
             <StackPanel Orientation="Horizontal">
                 <Image Source="Resources/backIcon.png" Width="20" Height="20"/>

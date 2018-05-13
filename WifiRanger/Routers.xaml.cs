@@ -18,6 +18,8 @@ namespace WifiRanger
     /// Class which initializes the list of routers on the home screen
     /// gets all data from local database 'routersdb.mdf' table - 'Routers'
     /// or from web service calls to Walmart's open API devoloper web service 
+    /// <author>Max Kernchen</author>
+    /// <date>05/05/2018</date>
     /// </summary>
     public partial class Routers : Page
     {

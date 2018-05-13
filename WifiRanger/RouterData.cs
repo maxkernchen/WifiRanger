@@ -5,6 +5,8 @@ namespace WifiRanger
 {
     /// <summary>
     /// Class which holds getter and setter methods for Router Data
+    /// <author>Max Kernchen</author>
+    /// <date>05/05/2018</date>
     /// </summary>
     class RouterData
     {

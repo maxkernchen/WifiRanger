@@ -11,6 +11,8 @@ namespace WifiRanger
 {
     /// <summary>
     /// MainPage class which holds the inputs for calculating the router's range
+    /// <author> Max Kernchen</author>
+    /// <date>05/05/2018</date>
     /// </summary>
     public partial class MainPage : Page
     {

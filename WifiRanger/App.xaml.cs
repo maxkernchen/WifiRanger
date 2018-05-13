@@ -9,7 +9,7 @@ using System.Windows;
 namespace WifiRanger
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Runner class which sends us to the Routers.xaml page
     /// </summary>
     public partial class App : Application
     {

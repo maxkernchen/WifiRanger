@@ -3,5 +3,5 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WifiRanger"
              StartupUri="MainWindow.xaml">
-  
+  <!--Runner class to send us to the MainWindow on start-->
 </Application>
