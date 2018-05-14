@@ -23,4 +23,4 @@ Finally, the results are diplayed along with the store link of the route near th
 
 **NOTES**: If there no internet connection router store pages and prices will not be available.
 
-       Calculating the coverage of a router is very difficult. This software is meant for **estimations** only.
+Calculating the coverage of a router is very difficult. This software is meant for **estimations** only.
