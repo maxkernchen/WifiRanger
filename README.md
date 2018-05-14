@@ -8,3 +8,7 @@ Wifi coverage is calculate by a modified free-space path loss formula which adds
 ![alt text](https://i.imgur.com/07flSrR.png)
 
 Frequency is between 2400 - 5800 megahertz for most routers, dBm or decibel-milliwatts is usually -57 or -58 which is the lowest Wifi strength for reliable packet delivery. Power is different for every router, most of the time higher power = higher range.
+
+WifiRanger is simple to use simply select a router by clicking on one in the list. This list of routers is sortable by Brand, Model, and Price. You can also search for a router's name or model using the search bar.
+
+![alt text](https://i.imgur.com/53umn3Y.png)
