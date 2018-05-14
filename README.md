@@ -17,6 +17,6 @@ The area must be between 1 and 10,000 to be accepted.
 
 ![alt text](https://i.imgur.com/HUyMUJj.png)
 
-Finally the results are diplayed along with the stored of the route near the top and a link to my website where there is an explaination on how these results are estimated.
+Finally, the results are diplayed along with the store link of the route near the top and a link to my website where there is an explaination on how these results are estimated. There also a start over which sends the user back to starting list of routers.
 
 ![alt text](https://i.imgur.com/vRinCVv.png)
