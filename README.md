@@ -16,3 +16,7 @@ Then the number of floors, approximate router location, and area in square feet 
 The area must be between 1 and 10,000 to be accepted.
 
 ![alt text](https://i.imgur.com/HUyMUJj.png)
+
+Finally the results are diplayed along with the stored of the route near the top and a link to my website where there is an explaination on how these results are estimated.
+
+![alt text](https://i.imgur.com/vRinCVv.png)
