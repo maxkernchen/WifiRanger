@@ -247,19 +247,26 @@ namespace WifiRanger
         /// <param name="e">arguments from the event used for the URI in this case</param>
         private void URL_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            if (e.Uri.AbsoluteUri.Length > 0)
+            if (e.Uri.ToString().Length > 0 && !e.Uri.ToString().Equals(Routers.DEFAULT_URL_STR))
             {
+
                 try
                 {
-                    Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                    string fullUrl = ConfigurationManager.AppSettings["walmartUrl"].ToString() + e.Uri.AbsoluteUri;
+                    Process.Start(new ProcessStartInfo(fullUrl));
                     e.Handled = true;
                 }
                 catch (System.InvalidOperationException ioe)
                 {
-                     
-                    MessageBox.Show("No Internet Connection Found");
+
+                    MessageBox.Show(ConfigurationManager.AppSettings["noUrlErrorMessage"].ToString());
                     Debug.WriteLine(ioe.Message);
                 }
+
+            }
+            else
+            {
+                MessageBox.Show(ConfigurationManager.AppSettings["noUrlErrorMessage"].ToString());
             }
         }
         /// <summary>
@@ -275,9 +282,11 @@ namespace WifiRanger
                 using (var webClient = new System.Net.WebClient())
                 {
                     //get the JSON response and use our api key
-                    String url = "http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString();
+                    String url = "http://api.walmartlabs.com/v1/items/" + itemid + 
+                        "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString();
 
-                    var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString());
+                    var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/" + 
+                        itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString());
                     //deserialize using newsoft's JSON.net
                     var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
                     productUrl = results["productUrl"];

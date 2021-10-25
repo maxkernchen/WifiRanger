@@ -11,6 +11,10 @@ using System.Data.SQLite;
 using System.Data;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net.Http;
+using RestSharp;
+using System.Collections;
+using System.ComponentModel;
 
 namespace WifiRanger
 {
@@ -19,7 +23,7 @@ namespace WifiRanger
     /// gets all data from local database 'routersdb.mdf' table - 'Routers'
     /// or from web service calls to Walmart's open API devoloper web service 
     /// <author>Max Kernchen</author>
-    /// <date>05/05/2018</date>
+    /// <date>10/21/2021</date>
     /// </summary>
     public partial class Routers : Page
     {
@@ -35,15 +39,35 @@ namespace WifiRanger
         private static readonly int ROUTER_IMAGE = 5;
         // location of Router table in router database
         private static readonly int ROUTER_TABLE = 0;
+        // index of api price response
+        private static readonly int API_PRICE_INDEX = 0;
+        // index of api url response
+        private static readonly int API_URL_INDEX = 1;
+        // index of rating url response
+        private static readonly int API_RATING_INDEX = 2;
         //the last column which was sorted
         private string lastSorted = "";
         // boolean for switching sorting direcotions
         private bool sortSwitch = false;
         // list for columns which are sortable
-        private static readonly string[] sortableColumns = { "Model", "Brand", "Current Price",
-                                                             };
+        private static readonly string[] sortableColumns = { "Model", "Brand", "Current Price"};
         // array of RouterData objects, these old all fields related to one router
-        private RouterData[] routerData;
+        private List<RouterData> routerDataList;
+        // default value for price if api does not return anything
+        private static readonly string DEFAULT_PRICE_STR = "0.0";
+        // default value for url if api does not return anything,
+        // public so it can be found by classes which navigiate to hyperlink
+        public static readonly string DEFAULT_URL_STR = "N/A";
+        // default value for rating if api does not return anything
+        private static readonly string DEFAULT_RATING_STR = "N/A";
+
+        // loading message when we retreiving from api in background
+        private static readonly string LOADING_API_DATA = "Loading...";
+
+        private readonly BackgroundWorker worker = new BackgroundWorker();
+
+        private Dictionary<string, ArrayList> allRouterApiResultsDict;
+
 
         /// <summary>
         /// Construtor which gets the all the routers from the Routers table
@@ -54,6 +78,12 @@ namespace WifiRanger
             InitializeComponent();
             DataSet routerDS = this.getRouterData();
             this.initalizeRouterList(routerDS);
+
+            // get api results in background so UI can open immediately 
+            worker.DoWork += workerGetApiRouterData;
+            worker.RunWorkerCompleted += workerFinishedApiRouterDataGet;
+
+            worker.RunWorkerAsync();
 
             //remove all back and forwards keyboard shortcuts
             NavigationCommands.BrowseBack.InputGestures.Clear();
@@ -116,63 +146,60 @@ namespace WifiRanger
         /// </summary>
         /// <param name="itemid">the itemid of the router</param>
         /// <returns>a string representation of the price</returns>
-        private string getPrice(string itemid)
+        private Dictionary<string, ArrayList> getApiData()
         {
-            double price = 0.0;
-            try
-            {
-                using (var webClient = new System.Net.WebClient())
-                {
-                    //connection url for web service with api key passed in from App.config file
 
-                    String url = "http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey=" 
-                        + ConfigurationManager.AppSettings["WalmartKey"].ToString();
-                    //json request sent to Walmart web service
-                    var request = webClient.DownloadString(url);
-                    var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(request);
-                    //get the current sales price
-                    price = results["salePrice"];
-                }
-            }
-            //catch any web service or network errors
-            catch (System.Net.WebException we)
+            Dictionary<string, ArrayList> allRouterResultsDict = new Dictionary<string, ArrayList>();
+
+            foreach (RouterData router in routerDataList)
             {
-                Debug.WriteLine(we.ToString());
-                return "No Price Available";
-            }
-            return System.Convert.ToString(price);
-        }
-        /// <summary>
-        /// Gets the walmart page url for the given item id of the router
-        /// </summary>
-        /// <param name="itemid">the item id for the router</param>
-        /// <returns>the url page for the router</returns>
-        private string getURL(string itemid)
-        {
-            String productUrl = "";
-            try
-            {
-                using (var webClient = new System.Net.WebClient())
+
+                string itemID = router.ItemID;
+                try
                 {
-                    //url to walmart web service
-                    String url = "http://api.walmartlabs.com/v1/items/" + itemid + "?format=json&apiKey="
-                        + ConfigurationManager.AppSettings["WalmartKey"].ToString();
-                    //pass url to json request and await results
-                    var request = webClient.DownloadString(url);
-                    var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(request);
-                    //get the product url 
-                    productUrl = results["productUrl"];
+                   
+                    ArrayList apiResults = new ArrayList();
+
+                    var client = new RestClient(String.Format(
+                       ConfigurationManager.
+                    AppSettings["walmartApiEndPointProductURL"].ToString(), itemID));
+                    var request = new RestRequest(Method.GET);
+
+                    request.AddHeader("x-rapidapi-host", ConfigurationManager.
+                    AppSettings["walmartApiEndPointHeader"].ToString());
+                    request.AddHeader("x-rapidapi-key", ConfigurationManager.
+                    AppSettings["walmartApiKey"].ToString());
+
+                    IRestResponse response = client.Execute(request);
+
+                    var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response.Content);
+                    var data = results["data"];
+
+                    string priceString = data["productByProductIdHolidays"]["offerList"][0]["pricesInfo"]
+                        ["prices"]["current"]["price"];
+                    string productUrlString = data["productByProductIdHolidays"]["productAttributes"]["canonicalUrl"];
+                    string productRatingString = data["productByProductIdHolidays"]["productAttributes"]["averageRating"];
+
+                    if (!String.IsNullOrEmpty(priceString) && !String.IsNullOrEmpty(productUrlString) &&
+                        !String.IsNullOrEmpty(productRatingString))
+                    {
+                        apiResults.Add(priceString);
+                        apiResults.Add(productUrlString);
+                        apiResults.Add(productRatingString);
+                    }
+
+                    allRouterResultsDict.Add(itemID, apiResults);
+
+                }
+                //catch any web service or network errors
+                catch (Exception e)
+                {
+                    allRouterResultsDict.Add(itemID, null);
                 }
             }
-            // catch any webservice or network exceptions 
-            catch (System.Net.WebException we)
-            {
-               
-                Debug.WriteLine(we.ToString());
-            }
-           
-            return productUrl;
+            return allRouterResultsDict;
         }
+
         /// <summary>
         /// Helper method for navigation to a url
         /// </summary>
@@ -181,17 +208,32 @@ namespace WifiRanger
         /// url</param>
         private void URL_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            try
+
+            if (e.Uri.ToString().Equals(LOADING_API_DATA))
             {
-                //go the the URI defined in the arguments
-                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-                e.Handled = true;
+                MessageBox.Show(ConfigurationManager.AppSettings["noApiDataYet"].ToString());
             }
-            //catch errors if there is no internet connection
-            catch (System.InvalidOperationException ioe)
+            else if (e.Uri.ToString().Length > 0 && !e.Uri.ToString().Equals(DEFAULT_URL_STR))
             {
-                Debug.WriteLine(ioe.Message);
-                MessageBox.Show("No Internet Connection Found");
+              
+                try
+                {
+                    string fullUrl = ConfigurationManager.AppSettings["walmartUrl"].ToString() 
+                        + e.Uri.ToString();
+                    Process.Start(new ProcessStartInfo(fullUrl));
+                    e.Handled = true;
+                }
+                catch (System.InvalidOperationException ioe)
+                {
+
+                    MessageBox.Show(ConfigurationManager.AppSettings["noUrlErrorMessage"].ToString());
+                    Debug.WriteLine(ioe.Message);
+                }
+                
+            }
+            else
+            {
+                MessageBox.Show(ConfigurationManager.AppSettings["noUrlErrorMessage"].ToString());
             }
         }
         /// <summary>
@@ -206,7 +248,7 @@ namespace WifiRanger
             this.resetSorting();
             //if there is no search terms just display all routers
             if (SearchRouters.Text.Length == 0)
-                RouterList.ItemsSource = this.routerData;
+                RouterList.ItemsSource = this.routerDataList;
             else
                 //search all routers for given term
                 this.searchAndUpdateRouters(SearchRouters.Text.ToLower());
@@ -220,25 +262,28 @@ namespace WifiRanger
             DataRow routerDR;
             // covert each data row into a new RouterData object
             numRows = routerDS.Tables[0].Rows.Count;
-            RouterData[] routerDataArray = new RouterData[numRows];
+            List<RouterData> routerDataLocalList = new List<RouterData>(numRows);
             for (int i = 0; i < numRows; i++)
             {
                 //get all 5 columns which are used in UI from the data set
                 routerDR = routerDS.Tables[ROUTER_TABLE].Rows[i];
 
-                routerDataArray[i] = new RouterData
+                routerDataLocalList.Add(new RouterData
                 {
                     Brand = routerDR.ItemArray.GetValue(ROUTER_BRAND).ToString(),
                     ImageData = LoadImage(routerDR.ItemArray.GetValue(ROUTER_IMAGE).ToString()),
                     Model = routerDR.ItemArray.GetValue(ROUTER_MODEL).ToString(),
-                    Price = this.getPrice(routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString()),
-                    URL = this.getURL(routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString())
-                };
+                    Price = LOADING_API_DATA,
+                    URL = LOADING_API_DATA,
+                    Rating = LOADING_API_DATA,
+                    ItemID = routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString()
+                });
             }
 
             // set the WPF list to the array of router data objects
-            RouterList.ItemsSource = routerDataArray;
-            this.routerData = routerDataArray;
+            RouterList.ItemsSource = routerDataLocalList;
+            this.routerDataList = routerDataLocalList;
+            
         }
         /// <summary>
         /// search from the routerList and find only routers whos brand or model contain the search terms
@@ -247,12 +292,12 @@ namespace WifiRanger
         private void searchAndUpdateRouters(string searchTerm)
         {
             List<RouterData> searchResults = new List<RouterData>();
-            for (int i = 0; i < routerData.Length; i++)
+            foreach(RouterData router in routerDataList)
             {
                 // Brand or Model contains the search term add it to he result list
-                if (routerData[i].Brand.ToLower().Contains(searchTerm) || routerData[i].Model.ToLower().Contains(searchTerm))
+                if (router.Brand.ToLower().Contains(searchTerm) || router.Model.ToLower().Contains(searchTerm))
                 {
-                    searchResults.Add(routerData[i]);
+                    searchResults.Add(router);
                 }
             }
             // set the WPF list to the results
@@ -316,24 +361,24 @@ namespace WifiRanger
         /// </summary>
         private void sortRouters()
         {
-          
+            
             if (lastSorted == "Brand")
             {
                 if (!sortSwitch)
                      //lambda for each name field
-                    RouterList.ItemsSource = routerData.OrderBy(obj => obj.Brand).ToList();                
+                    RouterList.ItemsSource = routerDataList.OrderBy(obj => obj.Brand).ToList();                
                 else                
                     //go other way
-                    RouterList.ItemsSource = routerData.OrderByDescending(obj => obj.Brand).ToList();
+                    RouterList.ItemsSource = routerDataList.OrderByDescending(obj => obj.Brand).ToList();
 
             }
             else if(lastSorted == "Model")
             {
                 if (!sortSwitch)     
                     //sort for each model name
-                    RouterList.ItemsSource = routerData.OrderBy(obj => obj.Model).ToList();
+                    RouterList.ItemsSource = routerDataList.OrderBy(obj => obj.Model).ToList();
                 else
-                    RouterList.ItemsSource = routerData.OrderByDescending(obj => obj.Model).ToList();
+                    RouterList.ItemsSource = routerDataList.OrderByDescending(obj => obj.Model).ToList();
 
             }
             else if(lastSorted == "Current Price")
@@ -341,7 +386,7 @@ namespace WifiRanger
                 if (!sortSwitch)
                 {                   
                     //sort for current price, but remove items with no price.
-                    List<RouterData> removeNoPrice = routerData.ToList();
+                    List<RouterData> removeNoPrice = routerDataList.ToList();
                     removeNoPrice.RemoveAll(data => data.Price == "No Price Available");
 
                     //need to convert to double for accurate sorting
@@ -350,7 +395,7 @@ namespace WifiRanger
                 }
                 else
                 {
-                    List<RouterData> removeNoPrice = routerData.ToList();
+                    List<RouterData> removeNoPrice = routerDataList.ToList();
                     removeNoPrice.RemoveAll(data => data.Price == "No Price Available");
                     removeNoPrice = removeNoPrice.OrderByDescending(d => Double.Parse(d.Price)).ToList();
                     RouterList.ItemsSource = removeNoPrice;
@@ -384,6 +429,55 @@ namespace WifiRanger
                 this.sortSwitch = false;
             }
         }
+        /// <summary>
+        /// Method to assign work to background worker, which will call API for each router in our DB
+        /// </summary>
+        /// <param name="sender"> sender not used here</param>
+        /// <param name="e">args not used here</param>
+        private void workerGetApiRouterData(object sender, DoWorkEventArgs e)
+        {
+
+            allRouterApiResultsDict = getApiData();
+        }
+        /// <summary>
+        /// Once the API calls have been completed, we will update our internal routerlist 
+        /// and refresh the items.
+        /// </summary>
+        /// <param name="sender"> sender not used here</param>
+        /// <param name="e">args not used here</param>
+        private void workerFinishedApiRouterDataGet(object sender,
+                                                   RunWorkerCompletedEventArgs e)
+        {
+         
+            foreach(KeyValuePair<string, ArrayList> item in allRouterApiResultsDict)
+            {
+                string itemIDDict = item.Key;
+                int currentRouterIndex = routerDataList.FindIndex(x => x.ItemID.Equals(itemIDDict));
+                if(currentRouterIndex >= 0 && item.Value != null)
+                {
+                    ArrayList apiResultDict = item.Value;
+                    routerDataList[currentRouterIndex].Price = apiResultDict[API_PRICE_INDEX].ToString();
+                    routerDataList[currentRouterIndex].URL = apiResultDict[API_URL_INDEX].ToString();
+                    routerDataList[currentRouterIndex].Rating = apiResultDict[API_PRICE_INDEX].ToString();
+                }
+                // if for some reason the API get not get data for this router, set some default values
+                else
+                {
+                    routerDataList[currentRouterIndex].Price = DEFAULT_PRICE_STR;
+                    // TODO update Hyper Link to non-link value so user does not try to click on it,
+                    // same for when it is still loading.
+                    routerDataList[currentRouterIndex].URL = DEFAULT_URL_STR;
+                    routerDataList[currentRouterIndex].Rating = DEFAULT_RATING_STR;
+                }
+            }
+
+            RouterList.ItemsSource = routerDataList;
+            RouterList.Items.Refresh();
+           
+
+        }
+
+       
     }
    
 }

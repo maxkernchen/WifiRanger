@@ -60,6 +60,17 @@ namespace WifiRanger
             get { return this._URL; }
             set { this._URL = value; }
         }
+
+        //the review ratings of the router's store page
+        private string _Rating;
+        /// <summary>
+        /// Gets or sets the URL
+        /// </summary>
+        public string Rating
+        {
+            get { return this._Rating; }
+            set { this._Rating = value; }
+        }
         // area used for tracking validation of area inputs for each router
         private int _Area;
         /// <summary>
@@ -70,7 +81,16 @@ namespace WifiRanger
             get { return this._Area; }
             set { this._Area = value; }
         }
-
+        //the the upc of the item for unique id
+        private string _ItemID;
+        /// <summary>
+        /// Gets or sets the ItemID
+        /// </summary>
+        public string ItemID
+        {
+            get { return this._ItemID; }
+            set { this._ItemID = value; }
+        }
     }
 }
 
