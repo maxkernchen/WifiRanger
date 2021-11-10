@@ -19,7 +19,8 @@ namespace WifiRanger
         /// <summary>
         /// Overriden validation result class which returns results for invalid inputs
         /// </summary>
-        /// <param name="value">the value passed in in this case an integer for the area covered</param>
+        /// <param name="value">the value passed in in this case an integer for the area 
+        /// covered</param>
         /// <param name="cultureInfo">the locale for this code, not used in this case</param>
         /// <returns>a result if validation has passed</returns>
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)

@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Configuration;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,7 +8,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using System.Data.SQLite;
 
 namespace WifiRanger
 {
@@ -18,7 +15,7 @@ namespace WifiRanger
     /// Class which calculates and displays the router's range using a 
     /// modified free path loss formula.
     /// <author>Max Kernchen</author>
-    /// <date>05/05/2018</date>
+    /// <date>11/09/2021</date>
     /// </summary>
     public partial class Coverage : Page
     {
@@ -32,20 +29,18 @@ namespace WifiRanger
         private double counter            = 0.0;
         // area covered by the router.
         private double area               = 0;
-        //if the router is high powered, found in the Routers table
-        private Boolean highPower = false;
         // static final field which is used to coveret meters to feet
         private static readonly double METERS_TO_FEET = 3.28084;
         //static final field which is the location of the frequency in the powerFreqList
         private static readonly int FREQUENCY_INDEX   = 0;
         //static final field which is the location of the power in the powerFreqList
-        private static readonly int POWER_INDEX       = 1;
+        private static readonly int POWER_INDEX = 1;
         //static final field which is the DBM or strength that the signal 
         //is expected to be for low power meters
-        private static readonly int LOW_POWER_DBM     = 57;
+        private static readonly int LOW_POWER_DBM = 57;
         //static final field which is the highpower DBM, 
         //this is higher which indicates that highpower can cover more area
-        private static readonly int HIGH_POWER_DBM    = 58;
+        private static readonly int HIGH_POWER_DBM = 58;
         //the height of a floor in meters
         private static readonly int HEIGHT_METERS_FLOOR = 3;
   
@@ -64,18 +59,33 @@ namespace WifiRanger
             // get the location: 0 == center 1 == corner
             int location = (int)Application.Current.Properties["RouterLocation"];
             // get a list of the power and the frequency
-            List<long> powerFreqList = this.getRouterData(Application.Current.Properties["SelectedRouter"].ToString());
+            RouterData router = this.getRouterByModel(Application.Current.Properties["SelectedRouter"].ToString());
             // get the current number passed into the area field 
             area = Convert.ToDouble(Application.Current.Properties["Area"].ToString());
-        
-             // get the distance covered in one direction, using modified free path loss formula 
-            double distanceCovered = this.calculateDistance(powerFreqList[POWER_INDEX], powerFreqList[FREQUENCY_INDEX]);
+
+            RouterImage.Source = router.ImageData;
+            if (!router.URL.Equals(Routers.DEFAULT_URL_STR) && 
+                !router.URL.Equals(Routers.LOADING_API_DATA))
+            {
+                RouterName.Text = router.Model;
+                StoreLink.NavigateUri = new Uri(ConfigurationManager.AppSettings["walmartUrl"].
+                            ToString() + router.URL);
+            }
+            else
+            {
+                RouterName.Text = router.Model + " (Could Not Load Store Page)";
+                StoreLink.NavigateUri = null;
+            }
+
+            // get the distance covered in one direction, using modified free path loss formula 
+            double distanceCovered = this.calculateDistance(Convert.ToDouble(router.Power), 
+                Convert.ToDouble(router.Frequency), router.IsHighPower);
             //get the covered for the entire area, based upon the floors and the location of the router
             percentCoverageVal = this.calulateCoverage(distanceCovered, area, Application.Current.Properties
-                ["Unit"].ToString() == "Meter",location == 0,floors);
+                ["Unit"].ToString() == "Meter", location == 0, floors);
             //create the dispatach timer for the animated percentage covered
             coverageTimer = new DispatcherTimer();
-            coverageTimer.Interval = new TimeSpan(0, 0, 0,0,10);
+            coverageTimer.Interval = new TimeSpan(0, 0, 0,0, 10);
             coverageTimer.Tick += CoverageTimer_Tick;
 
 
@@ -109,7 +119,7 @@ namespace WifiRanger
         /// <param name="power">the power of the router in milliwats</param>
         /// <param name="freqInMHz">the frequency of the route rin mhz</param>
         /// <returns></returns>
-        private double calculateDistance(double power, double freqInMHz)
+        private double calculateDistance(double power, double freqInMHz, bool highPower)
         {
             double exp = 0;
             if(!highPower)
@@ -182,63 +192,19 @@ namespace WifiRanger
         /// primary key in the Routers database</param>
         /// <returns>a list which contains the power and 
         /// frequency for the specified router model</returns>
-        private List<long> getRouterData(String model)
+        private RouterData getRouterByModel(string model)
         {
-            // connect to the SQLite databse
-            SQLiteConnection connection = new SQLiteConnection(Properties.Settings.Default.RoutersDBConnectionString);
-            List<long> frequencyPowerList = new List<long>();
-            try
+            RouterData currentRouter = null;
+            foreach(RouterData router in Routers.getRouterDataList())
             {
-                connection.Open();
+                if (router.Model.Equals(model))
+                {
+                    currentRouter = router;
+                    break;
+                }
             }
-            catch (Exception ex)
-            {
-               
-                Debug.WriteLine("Can not open connection! " + ex.ToString());
-            }
-            // get the frequency and add it to the returned list
-            SQLiteCommand cmdFreq = new SQLiteCommand(ConfigurationManager.
-                AppSettings["getFrequency"].ToString(), connection);
-            cmdFreq.Parameters.AddWithValue("@model", model);
-            // have to use long due to dynamic integer typing that SQLite does
-            long frequency =  (long) cmdFreq.ExecuteScalar();
-            frequencyPowerList.Add(frequency);
-            //get the power of the model and add it to the returned list
-            SQLiteCommand cmdPower = new SQLiteCommand(ConfigurationManager.
-                AppSettings["getPower"].ToString(), connection);
-            cmdPower.Parameters.AddWithValue("@model", model);
-            long power = (long)cmdPower.ExecuteScalar();
-            frequencyPowerList.Add(power);
-            //get the image resource name and use to populate the image 
-            //in the coverage page
-            SQLiteCommand cmdImage = new SQLiteCommand(ConfigurationManager.
-                AppSettings["getImage"].ToString(), connection);
-            cmdImage.Parameters.AddWithValue("@model", model);
-            string imageLocation = (string)cmdImage.ExecuteScalar();
-
-            RouterImage.Source =  this.LoadImage(imageLocation);
-            RouterName.Text = model;
-            //get the store link and make sure we can set it as a URI 
-            SQLiteCommand cmdURL = new SQLiteCommand(ConfigurationManager.
-                AppSettings["getID"].ToString(), connection);
-            cmdURL.Parameters.AddWithValue("@model", model);
-            try
-            {
-                StoreLink.NavigateUri = new Uri(this.getURL((long)cmdURL.ExecuteScalar()));
-            }catch(UriFormatException ufe)
-            {
-                MessageBox.Show("There is no internet connection, store links will not be available");
-                Debug.WriteLine(ufe.Message);
-            }
-           
-            // get if the router is high powered and set the respective boolean
-            SQLiteCommand cmdHighPower = new SQLiteCommand(ConfigurationManager.
-                AppSettings["getIsHighPower"].ToString(), connection);
-            cmdHighPower.Parameters.AddWithValue("@model", model);
-
-            highPower =  (long)cmdHighPower.ExecuteScalar() == 1;
             
-            return frequencyPowerList;
+            return currentRouter;
         }
         /// <summary>
         /// Navigates to the URI specified which opens up a new window in the default browswer
@@ -247,57 +213,29 @@ namespace WifiRanger
         /// <param name="e">arguments from the event used for the URI in this case</param>
         private void URL_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
+
+            // always consider the event handled, as it could be a valid URL or still loading.
+            e.Handled = true;
+
             if (e.Uri.ToString().Length > 0 && !e.Uri.ToString().Equals(Routers.DEFAULT_URL_STR))
             {
-
                 try
                 {
-                    string fullUrl = ConfigurationManager.AppSettings["walmartUrl"].ToString() + e.Uri.AbsoluteUri;
-                    Process.Start(new ProcessStartInfo(fullUrl));
-                    e.Handled = true;
+                    Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
                 }
                 catch (System.InvalidOperationException ioe)
                 {
-
-                    MessageBox.Show(ConfigurationManager.AppSettings["noUrlErrorMessage"].ToString());
+                    MessageBox.Show(ConfigurationManager.AppSettings["noUrlErrorMessage"].
+                        ToString());
                     Debug.WriteLine(ioe.Message);
                 }
-
             }
             else
             {
                 MessageBox.Show(ConfigurationManager.AppSettings["noUrlErrorMessage"].ToString());
             }
         }
-        /// <summary>
-        /// Request to Walmart's webservice to get the router's URL
-        /// </summary>
-        /// <param name="itemid">the unquie walmart item id</param>
-        /// <returns>a string representation of the routers url</returns>
-        private string getURL(long itemid)
-        {
-            String productUrl = "";
-            try
-            {
-                using (var webClient = new System.Net.WebClient())
-                {
-                    //get the JSON response and use our api key
-                    String url = "http://api.walmartlabs.com/v1/items/" + itemid + 
-                        "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString();
-
-                    var json = webClient.DownloadString("http://api.walmartlabs.com/v1/items/" + 
-                        itemid + "?format=json&apiKey=" + ConfigurationManager.AppSettings["WalmartKey"].ToString());
-                    //deserialize using newsoft's JSON.net
-                    var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
-                    productUrl = results["productUrl"];
-                }
-            }
-            catch (System.Net.WebException we)
-            { 
-                Debug.WriteLine(we.Message);
-            }
-            return productUrl;
-        }
+        
 
         /// <summary>
         /// Helper method which turns a URI path into a bitmap image

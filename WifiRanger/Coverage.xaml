@@ -26,7 +26,7 @@
       <!-- Text block for the model of the router displayed at the top of the page-->
             <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center">
                                     <Hyperlink Name="StoreLink"  RequestNavigate="URL_RequestNavigate" ToolTip="Go to Walmart Store page">
-                                        <TextBlock FontFamily="Cobert" FontSize="30"  Name="RouterName"  Text="Router"/>  
+                                        <TextBlock FontFamily="Cobert" FontSize="30"  Name="RouterName" Text="Router"/>  
                                     </Hyperlink>
                                 </TextBlock>
         <!-- Label for percent of covereage-->
@@ -36,7 +36,7 @@
         <Image Name="RouterImage" MaxWidth="170" MaxHeight="170" Opacity="50" Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom"></Image>
         <!--How this is calculated link to website -->
         <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center">
-                                    <Hyperlink NavigateUri ="https://maxkernchen.github.io/projects.html#wifiranger_calc" RequestNavigate="URL_RequestNavigate" ToolTip="Go to project page">
+                                    <Hyperlink Name="HowIsThisCalcLink" NavigateUri ="https://maxkernchen.github.io/projects.html#wifiranger_calc" RequestNavigate="URL_RequestNavigate" ToolTip="Go to project page">
                                         <TextBlock FontFamily="Cobert" FontSize="20"  Text="How is this calculated?"/>  
                                     </Hyperlink>
                                 </TextBlock>

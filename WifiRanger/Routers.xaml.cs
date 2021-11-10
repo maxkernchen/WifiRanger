@@ -11,7 +11,6 @@ using System.Data.SQLite;
 using System.Data;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Net.Http;
 using RestSharp;
 using System.Collections;
 using System.ComponentModel;
@@ -30,13 +29,19 @@ namespace WifiRanger
         //number of rows in router database
         private int numRows;
         // the column that contains the Router Brand
-        private static readonly int ROUTER_BRAND = 0;
+        public static readonly int ROUTER_BRAND = 0;
         // the column that contains the Router Model name and number
-        private static readonly int ROUTER_MODEL = 1;
+        public static readonly int ROUTER_MODEL = 1;
+        // the column that contains the Router Frequency
+        public static readonly int ROUTER_FREQUENCY = 2;
         // the column that contains the Router Model name and number
-        private static readonly int ROUTER_ITEM_ID = 3;
+        public static readonly int ROUTER_ITEM_ID = 3;
         // the column that contains the name of the ImageFile for the router
-        private static readonly int ROUTER_IMAGE = 5;
+        public static readonly int ROUTER_IMAGE = 5;
+        // the column that contains the name of the ImageFile for the router
+        public static readonly int ROUTER_POWER = 6;
+        // the column that contains the name of the ImageFile for the router
+        public static readonly int ROUTER_IS_HIGH_POWER = 7;
         // location of Router table in router database
         private static readonly int ROUTER_TABLE = 0;
         // index of api price response
@@ -50,24 +55,29 @@ namespace WifiRanger
         // boolean for switching sorting direcotions
         private bool sortSwitch = false;
         // list for columns which are sortable
-        private static readonly string[] sortableColumns = { "Model", "Brand", "Current Price"};
-        // array of RouterData objects, these old all fields related to one router
-        private List<RouterData> routerDataList;
+        private static readonly string[] sortableColumns = { "Model", "Brand", "Current Price", 
+            "Rating"};
+        // array of RouterData objects, this list holds all fields related to one router. 
+        // Static so Coverage class can access it without refetching from DB.
+        private static List<RouterData> routerDataList;
         // default value for price if api does not return anything
         private static readonly string DEFAULT_PRICE_STR = "0.0";
         // default value for url if api does not return anything,
         // public so it can be found by classes which navigiate to hyperlink
-        public static readonly string DEFAULT_URL_STR = "N/A";
+        public static readonly string DEFAULT_URL_STR = "Could Not Find URL";
         // default value for rating if api does not return anything
         private static readonly string DEFAULT_RATING_STR = "N/A";
-
-        // loading message when we retreiving from api in background
-        private static readonly string LOADING_API_DATA = "Loading...";
-
+        // loading message when we retreiving from api in background, public so coverage class 
+        // can make sure if a URL has been found yet
+        public static readonly string LOADING_API_DATA = "Loading...";
+        // name id of the url text, this will be set depending on if the API returned valid results
+        private static readonly string urlELementName = "urlTextWalmartStore";
+        //background worker, this allows our app to open right away. But the API data is later
+        //filled in.
         private readonly BackgroundWorker worker = new BackgroundWorker();
-
+        // private dict for storing our api results, can have null values if API request did not
+        // complete 
         private Dictionary<string, ArrayList> allRouterApiResultsDict;
-
 
         /// <summary>
         /// Construtor which gets the all the routers from the Routers table
@@ -96,8 +106,7 @@ namespace WifiRanger
        /// </summary>
        /// <param name="filename"> the name of the image in the resources folder</param>
        /// <returns>A BitmapImage which can be used within the router list in the UI </returns>
-
-        private BitmapImage LoadImage(string filename)
+        private BitmapImage loadImage(string filename)
         {
             return new BitmapImage(new Uri("pack://application:,,,/Resources/" + filename));
         }
@@ -122,7 +131,8 @@ namespace WifiRanger
         /// <returns>a SQL DataSet with all the routers in it</returns>
         private DataSet getRouterData()
         {
-            SQLiteConnection connection = new SQLiteConnection(Properties.Settings.Default.RoutersDBConnectionString);
+            SQLiteConnection connection = new SQLiteConnection
+                (Properties.Settings.Default.RoutersDBConnectionString);
             DataSet returnedDS = new DataSet();
             try
             {
@@ -135,7 +145,8 @@ namespace WifiRanger
 
             }
 
-            SQLiteDataAdapter sqlData = new SQLiteDataAdapter(Properties.Settings.Default.allRouters, connection);
+            SQLiteDataAdapter sqlData = new SQLiteDataAdapter
+                (Properties.Settings.Default.allRouters, connection);
             // put the data in the dataset and source it back to the Routers table
             sqlData.Fill(returnedDS);
             
@@ -149,11 +160,11 @@ namespace WifiRanger
         private Dictionary<string, ArrayList> getApiData()
         {
 
-            Dictionary<string, ArrayList> allRouterResultsDict = new Dictionary<string, ArrayList>();
+            Dictionary<string, ArrayList> allRouterResultsDict = 
+                new Dictionary<string, ArrayList>();
 
             foreach (RouterData router in routerDataList)
             {
-
                 string itemID = router.ItemID;
                 try
                 {
@@ -170,17 +181,23 @@ namespace WifiRanger
                     request.AddHeader("x-rapidapi-key", ConfigurationManager.
                     AppSettings["walmartApiKey"].ToString());
 
-                    IRestResponse response = client.Execute(request);
+                    IRestResponse response =  client.Execute(request);
 
-                    var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response.Content);
+                    var results = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>
+                        (response.Content);
+
                     var data = results["data"];
 
-                    string priceString = data["productByProductIdHolidays"]["offerList"][0]["pricesInfo"]
+                    string priceString = data["productByProductIdHolidays"]["offerList"]
+                        [0]["pricesInfo"]
                         ["prices"]["current"]["price"];
-                    string productUrlString = data["productByProductIdHolidays"]["productAttributes"]["canonicalUrl"];
-                    string productRatingString = data["productByProductIdHolidays"]["productAttributes"]["averageRating"];
+                    string productUrlString = data["productByProductIdHolidays"]
+                        ["productAttributes"]["canonicalUrl"];
+                    string productRatingString = data["productByProductIdHolidays"]
+                        ["productAttributes"]["averageRating"];
 
-                    if (!String.IsNullOrEmpty(priceString) && !String.IsNullOrEmpty(productUrlString) &&
+                    if (!String.IsNullOrEmpty(priceString) && 
+                        !String.IsNullOrEmpty(productUrlString) &&
                         !String.IsNullOrEmpty(productRatingString))
                     {
                         apiResults.Add(priceString);
@@ -208,9 +225,12 @@ namespace WifiRanger
         /// url</param>
         private void URL_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
+            // always consider the event handled, as it could be a valid URL or still loading.
+            e.Handled = true;
 
             if (e.Uri.ToString().Equals(LOADING_API_DATA))
             {
+               
                 MessageBox.Show(ConfigurationManager.AppSettings["noApiDataYet"].ToString());
             }
             else if (e.Uri.ToString().Length > 0 && !e.Uri.ToString().Equals(DEFAULT_URL_STR))
@@ -221,15 +241,15 @@ namespace WifiRanger
                     string fullUrl = ConfigurationManager.AppSettings["walmartUrl"].ToString() 
                         + e.Uri.ToString();
                     Process.Start(new ProcessStartInfo(fullUrl));
-                    e.Handled = true;
                 }
                 catch (System.InvalidOperationException ioe)
                 {
 
-                    MessageBox.Show(ConfigurationManager.AppSettings["noUrlErrorMessage"].ToString());
+                    MessageBox.Show(ConfigurationManager.
+                        AppSettings["noUrlErrorMessage"].ToString());
                     Debug.WriteLine(ioe.Message);
                 }
-                
+      
             }
             else
             {
@@ -248,7 +268,7 @@ namespace WifiRanger
             this.resetSorting();
             //if there is no search terms just display all routers
             if (SearchRouters.Text.Length == 0)
-                RouterList.ItemsSource = this.routerDataList;
+                RouterList.ItemsSource = routerDataList;
             else
                 //search all routers for given term
                 this.searchAndUpdateRouters(SearchRouters.Text.ToLower());
@@ -271,22 +291,29 @@ namespace WifiRanger
                 routerDataLocalList.Add(new RouterData
                 {
                     Brand = routerDR.ItemArray.GetValue(ROUTER_BRAND).ToString(),
-                    ImageData = LoadImage(routerDR.ItemArray.GetValue(ROUTER_IMAGE).ToString()),
+                    ImageData = loadImage(routerDR.ItemArray.GetValue(ROUTER_IMAGE).ToString()),
                     Model = routerDR.ItemArray.GetValue(ROUTER_MODEL).ToString(),
                     Price = LOADING_API_DATA,
                     URL = LOADING_API_DATA,
+                    URLName = LOADING_API_DATA,
                     Rating = LOADING_API_DATA,
-                    ItemID = routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString()
+                    ItemID = routerDR.ItemArray.GetValue(ROUTER_ITEM_ID).ToString(),
+                    Frequency = routerDR.ItemArray.GetValue(ROUTER_FREQUENCY).ToString(),
+                    Power = routerDR.ItemArray.GetValue(ROUTER_POWER).ToString(),
+                    IsHighPower = Convert.ToBoolean(Convert.ToInt32(routerDR.ItemArray.GetValue
+                                  (ROUTER_IS_HIGH_POWER).ToString()))
+
                 });
             }
 
             // set the WPF list to the array of router data objects
             RouterList.ItemsSource = routerDataLocalList;
-            this.routerDataList = routerDataLocalList;
+            routerDataList = routerDataLocalList;
             
         }
         /// <summary>
-        /// search from the routerList and find only routers whos brand or model contain the search terms
+        /// search from the routerList and find only routers whos brand or model contain the 
+        /// search terms
         /// </summary>
         /// <param name="searchTerm">the search terms to look for</param>
         private void searchAndUpdateRouters(string searchTerm)
@@ -295,7 +322,8 @@ namespace WifiRanger
             foreach(RouterData router in routerDataList)
             {
                 // Brand or Model contains the search term add it to he result list
-                if (router.Brand.ToLower().Contains(searchTerm) || router.Model.ToLower().Contains(searchTerm))
+                if (router.Brand.ToLower().Contains(searchTerm) || router.Model.ToLower().
+                    Contains(searchTerm))
                 {
                     searchResults.Add(router);
                 }
@@ -307,7 +335,8 @@ namespace WifiRanger
         /// Event listener for when a column is clicked for sorting
         /// </summary>
         /// <param name="sender">object which the event came from</param>
-        /// <param name="e">arguments from the event in this case used to get the correct source</param>
+        /// <param name="e">arguments from the event in this case used to get the correct 
+        /// source</param>
         private void Column_Click(object sender, RoutedEventArgs e)
         {
             //clear searches 
@@ -317,7 +346,8 @@ namespace WifiRanger
                 return;
 
             // get only name of column sorted
-            string column = columnClicked.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last();
+            string column = columnClicked.ToString().Split(new string[] { ": " }, 
+                StringSplitOptions.None).Last();
             //get rid of the arrows if needed
             if (column.Contains("\u25BC"))
                 column = column.Split(new string[] { " \u25BC" }, StringSplitOptions.None).First();
@@ -361,46 +391,31 @@ namespace WifiRanger
         /// </summary>
         private void sortRouters()
         {
-            
-            if (lastSorted == "Brand")
-            {
-                if (!sortSwitch)
-                     //lambda for each name field
-                    RouterList.ItemsSource = routerDataList.OrderBy(obj => obj.Brand).ToList();                
-                else                
-                    //go other way
-                    RouterList.ItemsSource = routerDataList.OrderByDescending(obj => obj.Brand).ToList();
 
-            }
-            else if(lastSorted == "Model")
-            {
-                if (!sortSwitch)     
-                    //sort for each model name
-                    RouterList.ItemsSource = routerDataList.OrderBy(obj => obj.Model).ToList();
-                else
-                    RouterList.ItemsSource = routerDataList.OrderByDescending(obj => obj.Model).ToList();
+            switch (lastSorted) {
 
-            }
-            else if(lastSorted == "Current Price")
-            {
-                if (!sortSwitch)
-                {                   
-                    //sort for current price, but remove items with no price.
-                    List<RouterData> removeNoPrice = routerDataList.ToList();
-                    removeNoPrice.RemoveAll(data => data.Price == "No Price Available");
-
-                    //need to convert to double for accurate sorting
-                    removeNoPrice = removeNoPrice.OrderBy(d =>Double.Parse(d.Price)).ToList();
-                    RouterList.ItemsSource = removeNoPrice;
-                }
-                else
-                {
-                    List<RouterData> removeNoPrice = routerDataList.ToList();
-                    removeNoPrice.RemoveAll(data => data.Price == "No Price Available");
-                    removeNoPrice = removeNoPrice.OrderByDescending(d => Double.Parse(d.Price)).ToList();
-                    RouterList.ItemsSource = removeNoPrice;
-                }
-                  
+                case ("Brand"):
+                    RouterList.ItemsSource = sortSwitch ? routerDataList.
+                            OrderByDescending(obj => obj.Brand).ToList() : 
+                            routerDataList.OrderBy(obj => obj.Brand).ToList();
+                    break;
+                case ("Model"):
+                    RouterList.ItemsSource = sortSwitch ? routerDataList.
+                        OrderByDescending(obj => obj.Model).ToList() : 
+                        routerDataList.OrderBy(obj => obj.Model).ToList();
+                    break;
+                case ("Current Price"):
+                    RouterList.ItemsSource = sortSwitch ? routerDataList.
+                        OrderByDescending(obj => obj.Price).ToList() :
+                        routerDataList.OrderBy(obj => obj.Price).ToList();
+                    break;
+                case ("Rating"):
+                    RouterList.ItemsSource = sortSwitch ? routerDataList.
+                        OrderByDescending(obj => obj.Rating).ToList() :
+                        routerDataList.OrderBy(obj => obj.Rating).ToList();
+                    break;
+                default:
+                    break;
             }
 
         }
@@ -420,9 +435,15 @@ namespace WifiRanger
                 string tempColumnClear = columnGridViewClear.Header.ToString();
                 //remove the arrows 
                 if (tempColumnClear.Contains("\u25BC"))
-                    tempColumnClear = tempColumnClear.Split(new string[] { " \u25BC" }, StringSplitOptions.None).First();
+                {
+                    tempColumnClear = tempColumnClear.Split(new string[] { " \u25BC" },
+                        StringSplitOptions.None).First();
+                }
                 else if (columnGridViewClear.Header.ToString().Contains("\u25B2"))
-                    tempColumnClear = tempColumnClear.Split(new string[] { " \u25B2" }, StringSplitOptions.None).First();
+                {
+                    tempColumnClear = tempColumnClear.Split(new string[] { " \u25B2" },
+                        StringSplitOptions.None).First();
+                }
                 //reset all columns to orginal state
                 columnGridViewClear.Header = tempColumnClear;
                 //reset sorting to ascending
@@ -430,7 +451,8 @@ namespace WifiRanger
             }
         }
         /// <summary>
-        /// Method to assign work to background worker, which will call API for each router in our DB
+        /// Method to assign work to background worker, which will call API for each router in our 
+        /// DB
         /// </summary>
         /// <param name="sender"> sender not used here</param>
         /// <param name="e">args not used here</param>
@@ -448,24 +470,31 @@ namespace WifiRanger
         private void workerFinishedApiRouterDataGet(object sender,
                                                    RunWorkerCompletedEventArgs e)
         {
-         
+            
             foreach(KeyValuePair<string, ArrayList> item in allRouterApiResultsDict)
             {
                 string itemIDDict = item.Key;
-                int currentRouterIndex = routerDataList.FindIndex(x => x.ItemID.Equals(itemIDDict));
+                int currentRouterIndex = routerDataList.FindIndex(x => x.ItemID.Equals
+                (itemIDDict));
                 if(currentRouterIndex >= 0 && item.Value != null)
                 {
                     ArrayList apiResultDict = item.Value;
-                    routerDataList[currentRouterIndex].Price = apiResultDict[API_PRICE_INDEX].ToString();
-                    routerDataList[currentRouterIndex].URL = apiResultDict[API_URL_INDEX].ToString();
-                    routerDataList[currentRouterIndex].Rating = apiResultDict[API_PRICE_INDEX].ToString();
+                    routerDataList[currentRouterIndex].Price = apiResultDict[API_PRICE_INDEX].
+                        ToString();
+                    routerDataList[currentRouterIndex].URL = apiResultDict[API_URL_INDEX].
+                        ToString();
+                    routerDataList[currentRouterIndex].URLName =
+                        routerDataList[currentRouterIndex].Model + " Store Page";
+                    routerDataList[currentRouterIndex].Rating = apiResultDict[API_RATING_INDEX].
+                        ToString();
+
                 }
-                // if for some reason the API get not get data for this router, set some default values
+                // if for some reason the API get not get data for this router, set some default
+                // values
                 else
                 {
                     routerDataList[currentRouterIndex].Price = DEFAULT_PRICE_STR;
-                    // TODO update Hyper Link to non-link value so user does not try to click on it,
-                    // same for when it is still loading.
+                    routerDataList[currentRouterIndex].URLName = DEFAULT_URL_STR;
                     routerDataList[currentRouterIndex].URL = DEFAULT_URL_STR;
                     routerDataList[currentRouterIndex].Rating = DEFAULT_RATING_STR;
                 }
@@ -476,7 +505,15 @@ namespace WifiRanger
            
 
         }
-
+        /// <summary>
+        /// Return our global list of all routers, this is used by coverage class. 
+        /// Much faster to store it here than requery the database in the coverage class.
+        /// </summary>
+        /// <returns>List<RouterData> list of routers </returns>
+        public static List<RouterData> getRouterDataList()
+        {
+            return routerDataList;
+        }
        
     }
    

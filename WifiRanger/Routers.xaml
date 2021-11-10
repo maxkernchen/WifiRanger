@@ -85,15 +85,14 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Name="urlToContent" >
-                                    <Hyperlink NavigateUri="{Binding URL}" Name="StoreLink" RequestNavigate="URL_RequestNavigate">
-                                        <TextBlock Text="Walmart Store Page"/>  
+                                    <Hyperlink NavigateUri="{Binding URL}" RequestNavigate="URL_RequestNavigate">
+                                        <TextBlock Text="{Binding URLName}"/>  
                                     </Hyperlink>
                                 </TextBlock>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Rating" Width="100" DisplayMemberBinding=
-                          "{Binding Rating }" />
+                    <GridViewColumn Header="Rating" Width="100" DisplayMemberBinding="{Binding Rating }" />
                 </GridView>
             </ListView.View>
         </ListView>
