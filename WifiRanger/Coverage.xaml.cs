@@ -26,15 +26,11 @@ namespace WifiRanger
         private double percentCoverageVal = 0.0;
         // counter for animated percentage, has to be field 
         //because tick is called many times
-        private double counter            = 0.0;
+        private double counter = 0.0;
         // area covered by the router.
-        private double area               = 0;
+        private double area = 0;
         // static final field which is used to coveret meters to feet
         private static readonly double METERS_TO_FEET = 3.28084;
-        //static final field which is the location of the frequency in the powerFreqList
-        private static readonly int FREQUENCY_INDEX   = 0;
-        //static final field which is the location of the power in the powerFreqList
-        private static readonly int POWER_INDEX = 1;
         //static final field which is the DBM or strength that the signal 
         //is expected to be for low power meters
         private static readonly int LOW_POWER_DBM = 57;
