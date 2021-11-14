@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WifiRanger", "WifiRanger\WifiRanger.csproj", "{7BD2B8D4-8BF5-4BB5-89D7-F05A45B66321}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "WifiRangerInstaller", "WifiRangerInstaller\WifiRangerInstaller.vdproj", "{CDB8E6C7-C1C7-4297-8BD8-F0C6D65A0A77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +20,9 @@ Global
 		{7BD2B8D4-8BF5-4BB5-89D7-F05A45B66321}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
 		{7BD2B8D4-8BF5-4BB5-89D7-F05A45B66321}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BD2B8D4-8BF5-4BB5-89D7-F05A45B66321}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDB8E6C7-C1C7-4297-8BD8-F0C6D65A0A77}.Debug|Any CPU.ActiveCfg = Debug
+		{CDB8E6C7-C1C7-4297-8BD8-F0C6D65A0A77}.DefaultBuild|Any CPU.ActiveCfg = Debug
+		{CDB8E6C7-C1C7-4297-8BD8-F0C6D65A0A77}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
