@@ -22,6 +22,6 @@ Finally, the results are diplayed along with the store link of the route near th
 
 ![alt text](https://i.imgur.com/z9V1BNr.png)
 
-**NOTES**: If there no internet connection router store pages and prices will not be available.
+**NOTES**: If there no internet connection router store pages, ratings, and prices will not be available. But coverage can still be calculated.
 
 Calculating the coverage of a router is very difficult. This software is meant for **estimations** only.
