@@ -1,7 +1,7 @@
 # WifiRanger is a C# WPF project which calculates the approximate percentage of WiFi coverage for a given router and floor plan. 
 
 It display routers currently for sale on walmart.com, and will show real-time price and rating information retrieved from a third-party web service API.
-The real-time results may not be avaiable on intial start of the application, they are fetched in a background thread and will be updated when complete.
+The real-time results may not be avaiable on intital start of the application, they are fetched in a background thread and will be updated when complete.
 
 WiFi coverage is calculate by a modified free-space path loss formula which adds the natural log of the router's power to it. Some basic real world testing using simple Android applications proved this method to be fairly accurate. Below is the current formula WifiRanger uses to calculate the distance, in one direction, covered in meters.
 
