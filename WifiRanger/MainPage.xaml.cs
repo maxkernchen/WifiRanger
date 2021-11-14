@@ -61,7 +61,8 @@ namespace WifiRanger
             {
                 Debug.WriteLine(fe.Message);
             }
-            //check that there is a floor selected, the area is between 1 and 10,000, and the routerlocation is also selected
+            //check that there is a floor selected, the area is between 1 and 10,000, and the
+            //routerlocation is also selected
             if (Floors.SelectedItem != null && (area >= 1 && area <= 10000))
             {
                 //stored the area in the application properties
@@ -72,7 +73,8 @@ namespace WifiRanger
                 else
                     Application.Current.Properties["Unit"] = "Meter";
                 //get the floor number only, spilt the : for only the number
-                int floor_num = int.Parse(Floors.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last());
+                int floor_num = int.Parse(Floors.SelectedItem.ToString().Split(new string[]
+                { ": " }, StringSplitOptions.None).Last());
 
                 ///minus 1 since a one story house does not need to factor in height
                 Application.Current.Properties["Floors"] = floor_num -1;
@@ -93,7 +95,8 @@ namespace WifiRanger
 
         }
         /// <summary>
-        /// When the floors combobox is closed, check that if inputs are valid and enable the calculate button
+        /// When the floors combobox is closed, check that if inputs are valid and enable the 
+        /// calculate button
         /// </summary>
         /// <param name="sender">where the event came from, not used in this case</param>
         /// <param name="e">arguments from the event, not used in this case</param>

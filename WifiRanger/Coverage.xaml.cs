@@ -55,7 +55,8 @@ namespace WifiRanger
             // get the location: 0 == center 1 == corner
             int location = (int)Application.Current.Properties["RouterLocation"];
             // get a list of the power and the frequency
-            RouterData router = this.getRouterByModel(Application.Current.Properties["SelectedRouter"].ToString());
+            RouterData router = this.getRouterByModel(Application.Current.Properties
+                ["SelectedRouter"].ToString());
             // get the current number passed into the area field 
             area = Convert.ToDouble(Application.Current.Properties["Area"].ToString());
 
@@ -76,9 +77,11 @@ namespace WifiRanger
             // get the distance covered in one direction, using modified free path loss formula 
             double distanceCovered = this.calculateDistance(Convert.ToDouble(router.Power), 
                 Convert.ToDouble(router.Frequency), router.IsHighPower);
-            //get the covered for the entire area, based upon the floors and the location of the router
-            percentCoverageVal = this.calulateCoverage(distanceCovered, area, Application.Current.Properties
-                ["Unit"].ToString() == "Meter", location == 0, floors);
+            //get the covered for the entire area, based upon the floors and the location of the
+            //router
+            percentCoverageVal = this.calulateCoverage(distanceCovered, area,
+                Application.Current.Properties ["Unit"].ToString() == "Meter", location == 0,
+                floors);
             //create the dispatach timer for the animated percentage covered
             coverageTimer = new DispatcherTimer();
             coverageTimer.Interval = new TimeSpan(0, 0, 0,0, 10);
@@ -118,18 +121,25 @@ namespace WifiRanger
         private double calculateDistance(double power, double freqInMHz, bool highPower)
         {
             double exp = 0;
-            if(!highPower)
+            if (!highPower)
+            {
                 //free path loss formula solved for distance with natual log of power added, 
                 //to better estimate based upon real world observations 
-                exp = (27.55 - (20 * Math.Log10(freqInMHz)) + LOW_POWER_DBM + Math.Log(power)) / 20.0;
-           else
+                exp = (27.55 - (20 * Math.Log10(freqInMHz)) + LOW_POWER_DBM + Math.Log(power))
+                    / 20.0;
+            }
+            else
+            {
                 //add a bit more signal buffer for high power routers 
-                exp = (27.55 - (20 * Math.Log10(freqInMHz)) + HIGH_POWER_DBM + Math.Log(power)) / 20.0;
+                exp = (27.55 - (20 * Math.Log10(freqInMHz)) + HIGH_POWER_DBM + Math.Log(power))
+                    / 20.0;
+            }
 
             return Math.Pow(10.0, exp);
         }
         /// <summary>
-        //  Turns the distance covered in one direction into a total percent covered of the area in the house
+        //  Turns the distance covered in one direction into a total percent covered of the area
+        //  in the house
         /// </summary>
         /// <param name="distanceCovered">the distance covered in one direction in meters</param>
         /// <param name="area">the area of the house in sq meters</param>
@@ -137,13 +147,15 @@ namespace WifiRanger
         /// <param name="nearCenter">if the router is near the center</param>
         /// <param name="numFloors">how many floors are in the house</param>
         /// <returns>a double of the percent covered</returns>
-        private double calulateCoverage(double distanceCovered, double area, bool sqMeters, Boolean nearCenter, int numFloors)
+        private double calulateCoverage(double distanceCovered, double area, bool sqMeters, 
+            Boolean nearCenter, int numFloors)
         {
             //subtract the 50% height of the floors from the range 
             distanceCovered = distanceCovered - (.5 *(numFloors * HEIGHT_METERS_FLOOR));
             //covert the router range in one direction to feet if area was in sq feet
             if (!sqMeters)
                 distanceCovered = distanceCovered * METERS_TO_FEET;
+
             // get the width and height assuming an average house is 
             // is a 7:10 height width ratio
             double width = (Math.Sqrt(area/70)) * 10;
@@ -164,12 +176,7 @@ namespace WifiRanger
             else
                 coverage = (lengthCoverage) * 100;
 
-            
-            if (coverage > 100)
-                return 100;
-            else
-                return coverage;
-
+            return coverage > 100 ? 100 : coverage;
 
         }
         /// <summary>
@@ -232,17 +239,6 @@ namespace WifiRanger
             }
         }
         
-
-        /// <summary>
-        /// Helper method which turns a URI path into a bitmap image
-        /// </summary>
-        /// <param name="filename">the image file name from the Routers database</param>
-        /// <returns>BitMapImage for the image files in the resources folder</returns>
-        private BitmapImage LoadImage(string filename)
-        {
-            return new BitmapImage(new Uri("pack://application:,,,/Resources/" + filename));
-        }
-
         /// <summary>
         /// Start over button event handler which sends the user back to the Routers page
         /// </summary>
@@ -250,8 +246,8 @@ namespace WifiRanger
         /// <param name="e">arguments for the event, not used in this case</param>
         private void startOverBtn_Click(object sender, RoutedEventArgs e)
         {
-            
-            this.NavigationService.Navigate(new Uri("Routers.xaml", UriKind.Relative));
+            this.NavigationService.GoBack();
+            this.NavigationService.GoBack();
         }
 
     }

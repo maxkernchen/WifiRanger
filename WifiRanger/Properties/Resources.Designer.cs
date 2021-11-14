@@ -63,26 +63,6 @@ namespace WifiRanger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ac1350 {
-            get {
-                object obj = ResourceManager.GetObject("ac1350", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ASUS_RT {
-            get {
-                object obj = ResourceManager.GetObject("ASUS_RT", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap ax1500_img {
             get {
                 object obj = ResourceManager.GetObject("ax1500_img", resourceCulture);
@@ -113,9 +93,9 @@ namespace WifiRanger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap D_Link_AC1200 {
+        public static System.Drawing.Bitmap mr9000_img {
             get {
-                object obj = ResourceManager.GetObject("D_Link_AC1200", resourceCulture);
+                object obj = ResourceManager.GetObject("mr9000_img", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +103,9 @@ namespace WifiRanger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap N750_IMG {
+        public static System.Drawing.Bitmap r6806_img {
             get {
-                object obj = ResourceManager.GetObject("N750_IMG", resourceCulture);
+                object obj = ResourceManager.GetObject("r6806_img", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +113,9 @@ namespace WifiRanger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Netgear_AC2300 {
+        public static System.Drawing.Bitmap r7450_img {
             get {
-                object obj = ResourceManager.GetObject("Netgear_AC2300", resourceCulture);
+                object obj = ResourceManager.GetObject("r7450_img", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +123,9 @@ namespace WifiRanger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Netgear_AC3200 {
+        public static System.Drawing.Bitmap rt_ac66u_img {
             get {
-                object obj = ResourceManager.GetObject("Netgear_AC3200", resourceCulture);
+                object obj = ResourceManager.GetObject("rt_ac66u_img", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,39 +133,9 @@ namespace WifiRanger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap nighthawk_ac1900 {
+        public static System.Drawing.Bitmap wr940n_img {
             get {
-                object obj = ResourceManager.GetObject("nighthawk_ac1900", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Tenda_AC9 {
-            get {
-                object obj = ResourceManager.GetObject("Tenda_AC9", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap TL_WR940N_IMG {
-            get {
-                object obj = ResourceManager.GetObject("TL_WR940N_IMG", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap TP_WR841 {
-            get {
-                object obj = ResourceManager.GetObject("TP_WR841", resourceCulture);
+                object obj = ResourceManager.GetObject("wr940n_img", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -5,6 +5,8 @@ namespace WifiRanger
 {
     /// <summary>
     /// This class just holds the Window class which is needed for starting up the applications
+    ///  <author>Max Kernchen</author>
+    /// <date>05/05/2018</date>
     /// </summary>
     public partial class MainWindow : Window
     {

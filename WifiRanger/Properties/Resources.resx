@@ -118,43 +118,28 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="TL_WR940N_IMG" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TL-WR940N_IMG.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="N750_IMG" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\N750_IMG.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="BackGround2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BackGround2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BackGround" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BackGround.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="nighthawk_ac1900" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\nighthawk_ac1900.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ac1350" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ac1350.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ASUS_RT" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ASUS_RT.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="D_Link_AC1200" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\D-Link_AC1200.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Netgear_AC2300" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Netgear_AC2300.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Netgear_AC3200" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Netgear_AC3200.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Tenda_AC9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tenda_AC9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TP_WR841" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TP_WR841.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ax1500_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ax1500_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mr9000_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mr9000_img.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="r6806_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\r6806_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="r7450_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\r7450_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="rt_ac66u_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\rt-ac66u_img.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wr940n_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wr940n_img.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

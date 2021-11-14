@@ -14,6 +14,7 @@ using System.Diagnostics;
 using RestSharp;
 using System.Collections;
 using System.ComponentModel;
+using System.Threading;
 
 namespace WifiRanger
 {
@@ -66,18 +67,18 @@ namespace WifiRanger
         // public so it can be found by classes which navigiate to hyperlink
         public static readonly string DEFAULT_URL_STR = "Could Not Find URL";
         // default value for rating if api does not return anything
-        private static readonly string DEFAULT_RATING_STR = "N/A";
+        private static readonly string DEFAULT_RATING_STR = "0.0";
         // loading message when we retreiving from api in background, public so coverage class 
         // can make sure if a URL has been found yet
         public static readonly string LOADING_API_DATA = "Loading...";
-        // name id of the url text, this will be set depending on if the API returned valid results
-        private static readonly string urlELementName = "urlTextWalmartStore";
         //background worker, this allows our app to open right away. But the API data is later
         //filled in.
         private readonly BackgroundWorker worker = new BackgroundWorker();
         // private dict for storing our api results, can have null values if API request did not
         // complete 
         private Dictionary<string, ArrayList> allRouterApiResultsDict;
+        // how many ms to sleep before next api call/
+        private static readonly int API_SLEEP_MS = 500;
 
         /// <summary>
         /// Construtor which gets the all the routers from the Routers table
@@ -206,6 +207,9 @@ namespace WifiRanger
                     }
 
                     allRouterResultsDict.Add(itemID, apiResults);
+
+                    // wait a little bit to not hit request limits.
+                    Thread.Sleep(API_SLEEP_MS);
 
                 }
                 //catch any web service or network errors
@@ -406,13 +410,13 @@ namespace WifiRanger
                     break;
                 case ("Current Price"):
                     RouterList.ItemsSource = sortSwitch ? routerDataList.
-                        OrderByDescending(obj => obj.Price).ToList() :
-                        routerDataList.OrderBy(obj => obj.Price).ToList();
+                        OrderByDescending(obj => Convert.ToDouble(obj.Price)).ToList() :
+                        routerDataList.OrderBy(obj => Convert.ToDouble(obj.Price)).ToList();
                     break;
-                case ("Rating"):
+                case ("Rating"):   
                     RouterList.ItemsSource = sortSwitch ? routerDataList.
-                        OrderByDescending(obj => obj.Rating).ToList() :
-                        routerDataList.OrderBy(obj => obj.Rating).ToList();
+                        OrderByDescending(obj => Convert.ToDouble(obj.Rating)).ToList() :
+                        routerDataList.OrderBy(obj => Convert.ToDouble(obj.Rating)).ToList();
                     break;
                 default:
                     break;
@@ -458,7 +462,6 @@ namespace WifiRanger
         /// <param name="e">args not used here</param>
         private void workerGetApiRouterData(object sender, DoWorkEventArgs e)
         {
-
             allRouterApiResultsDict = getApiData();
         }
         /// <summary>
